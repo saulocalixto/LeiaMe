@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as AppCss from "./AppCss.js";
+import Posts from './Posts.js'
 
 const categorias = [
   "Todos",
@@ -8,6 +9,24 @@ const categorias = [
   "Desenvolvimento",
   "Métodos de Desenvolvimento"
 ];
+
+let posts = [
+  {
+    Titulo: 'Todas as vacas estão mortas!',
+    Autor: 'Saulo Calixto',
+    Like: 10
+  },
+  {
+    Titulo: 'Título n. 2',
+    Autor: 'Guilberto Berto',
+    Like: 10
+  },
+  {
+    Titulo: 'Título n.3',
+    Autor: 'Beltrano da Silva',
+    Like: 10
+  }
+]
 
 class App extends Component {
   render() {
@@ -25,25 +44,9 @@ class App extends Component {
             </select>
           </div>
         </div>
-        <div style={AppCss.postagens}>
-          <div className="postagens">
-            <div className="post" style={AppCss.postsIndividuais}>
-              <div>Título do Post</div>
-              <div>Autor do Post</div>
-              <div>Likes</div>
-            </div>
-            <div className="post" style={AppCss.postsIndividuais}>
-              <div>Título do Post</div>
-              <div>Autor do Post</div>
-              <div style={AppCss.like}>Likes</div>
-            </div>
-            <div className="post" style={AppCss.postsIndividuais}>
-              <div>Título do Post</div>
-              <div>Autor do Post</div>
-              <div>Likes</div>
-            </div>
-          </div>
-        </div>
+        <Posts posts={posts} />
+        <div style={AppCss.linhaRodaPe}></div>
+          <div className='rodaPe' style={AppCss.textoRodape}>Copyright Calixto's WebPage</div>
       </div>
     );
   }
