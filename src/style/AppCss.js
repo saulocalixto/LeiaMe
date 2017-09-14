@@ -1,3 +1,4 @@
+import logo from '../icons/arrow-drop-down.svg';
 
 export const barraMenuStylus = {
   minHeight: '60px',
@@ -6,13 +7,14 @@ export const barraMenuStylus = {
   right: '0',
   left: '0',
   borderBottom: '1px solid #ccc',
-  background: '#FA5F00',
+  background: '#0066cc',
   zIndex: '2',
   fontWeight: 'bold',
   color: '#FFFFFF',
   fontSize: 'xx-large',
   textAlign: 'center',
-  paddingTop: '30'
+  paddingTop: '30',
+  margin: '10px'
 };
 
 export const selecionaCategoria = {
@@ -22,9 +24,9 @@ export const selecionaCategoria = {
   width: '40px',
   height: '40px',
   borderRadius: '50%',
-  background: 'orange',
-  backgroundImage: "url('../icons/arrow-drop-down.svg')",
-  backgroundRepeat: 'repeat',
+  background: '#000099',
+  backgroundImage: "url(" + logo + ")",
+  backgroundRepeat: 'no-repeat',
   backgroundPosition: 'center',
   backgroundSize: '20px',
   marginLeft: '10px',
@@ -37,39 +39,6 @@ export const select = {
   opacity: '0',
   cursor: 'pointer'
 }
-
-export const postagens = {
-  fontSize: '15px',
-  padding: '30px',
-  backgroundColor: '#ffff99',
-  color: '#cc3300',
-  mozBorderRadius: '10px',
-  webkitBorderRadius: '10px',
-  borderRadius: '10px',
-  borderButtom: '1px solid #000000',
-  width: 'auto',
-  alignContent: 'center',
-  margin: '200px'
-}
-
-export const postsIndividuais = {
-  border: '2px solid #FFFFFF',
-  margin: '10px',
-  padding: '10px',
-  boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
-  transition: '0.3s'
-}
-
-export const like = {
-  fontSize: 'x-small'
-}
-export const titulo = {
-  fontSize: 'x-large'
-}
-
-export const Novo = {
-      ...selecionaCategoria
-    }
 
 export const linhaRodaPe = {
   height:'1px', 

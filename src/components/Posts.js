@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as AppCss from "./AppCss.js";
+import * as AppCss from "../style/PostsCss.js";
 
 class Posts extends Component {
   render() {
@@ -13,7 +13,7 @@ class Posts extends Component {
               <div style={AppCss.like}>{x.Like}</div>
             </div>
           ))}
-          <div style={AppCss.Novo}>+</div>
+          <div style={AppCss.Novo}></div>
         </div>
       </div>
     );

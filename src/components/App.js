@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as AppCss from "./AppCss.js";
+import * as AppCss from "../style/AppCss.js";
 import Posts from './Posts.js'
 
 const categorias = [
