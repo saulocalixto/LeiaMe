@@ -1,34 +1,44 @@
 import React, { Component } from "react";
 import * as AppCss from "../style/AppCss.js";
-import Posts from './Posts.js'
-
-const categorias = [
-  "Todos",
-  "Arquitetura de Software",
-  "Engenharia de Software",
-  "Desenvolvimento",
-  "Métodos de Desenvolvimento"
-];
+import Posts from "./Posts.js";
+import categories from '../api-server/categories.js'
 
 let posts = [
   {
-    Titulo: 'Todas as vacas estão mortas!',
-    Autor: 'Saulo Calixto',
+    Titulo: "Todas as vacas estão mortas!",
+    Autor: "Saulo Calixto",
     Like: 10
   },
   {
-    Titulo: 'Título n. 2',
-    Autor: 'Guilberto Berto',
+    Titulo: "Título n. 2",
+    Autor: "Guilberto Berto",
     Like: 10
   },
   {
-    Titulo: 'Título n.3',
-    Autor: 'Beltrano da Silva',
+    Titulo: "Título n.3",
+    Autor: "Beltrano da Silva",
     Like: 10
   }
-]
+];
 
 class App extends Component {
+
+  state = {
+    categorias: []
+  }
+
+  token = fetch( {
+    headers: { Authorization: "Saulo Calixto" }
+  });
+
+  componentDidMount() {
+    categories.getAll(this.token).then((categorias) => {
+      categorias = categorias.categories;
+      this.setState({ categorias })
+    });
+  }
+
+
   render() {
     console.log(AppCss);
     return (
@@ -38,15 +48,17 @@ class App extends Component {
           <div className="barra" />
           <div className="categoriasMenu" style={AppCss.selecionaCategoria}>
             <select name="categoria" value="categoria" style={AppCss.select}>
-              {categorias.map((categoria, indice) => (
-                <option key={indice}>{categoria}</option>
+              {this.state.categorias.map((categoria, indice) => (
+                <option key={indice}>{categoria.name}</option>
               ))}
             </select>
           </div>
         </div>
         <Posts posts={posts} />
-        <div style={AppCss.linhaRodaPe}></div>
-          <div className='rodaPe' style={AppCss.textoRodape}>Copyright Calixto's WebPage</div>
+        <div style={AppCss.linhaRodaPe} />
+        <div className="rodaPe" style={AppCss.textoRodape}>
+          Copyright Calixto's WebPage
+        </div>
       </div>
     );
   }
