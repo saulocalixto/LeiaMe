@@ -1,30 +1,14 @@
 import React, { Component } from "react";
 import * as AppCss from "../style/AppCss.js";
 import Posts from "./Posts.js";
-import categories from '../api-server/categories.js'
-
-let posts = [
-  {
-    Titulo: "Todas as vacas estão mortas!",
-    Autor: "Saulo Calixto",
-    Like: 10
-  },
-  {
-    Titulo: "Título n. 2",
-    Autor: "Guilberto Berto",
-    Like: 10
-  },
-  {
-    Titulo: "Título n.3",
-    Autor: "Beltrano da Silva",
-    Like: 10
-  }
-];
+import * as ApiCategorias from '../api/ApiCategorias.js'
+import * as ApiPosts from '../api/ApiPosts.js'
 
 class App extends Component {
 
   state = {
-    categorias: []
+    categorias: [],
+    posts: []
   }
 
   token = fetch( {
@@ -32,10 +16,14 @@ class App extends Component {
   });
 
   componentDidMount() {
-    categories.getAll(this.token).then((categorias) => {
-      categorias = categorias.categories;
+    
+    ApiCategorias.getAllCategories().then((categorias) => {
       this.setState({ categorias })
-    });
+    }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
+    
+    ApiPosts.getAllPosts().then((posts) => {
+      this.setState({ posts })
+    }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
   }
 
 
@@ -54,7 +42,7 @@ class App extends Component {
             </select>
           </div>
         </div>
-        <Posts posts={posts} />
+        <Posts posts={this.state.posts} />
         <div style={AppCss.linhaRodaPe} />
         <div className="rodaPe" style={AppCss.textoRodape}>
           Copyright Calixto's WebPage

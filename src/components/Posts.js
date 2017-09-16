@@ -8,9 +8,9 @@ class Posts extends Component {
         <div className="postagens">
           {this.props.posts.map(x => (
             <div className="post" style={AppCss.postsIndividuais}>
-              <div style={AppCss.titulo}>{x.Titulo}</div>
-              <div>{x.Autor}</div>
-              <div style={AppCss.like}>{x.Like}</div>
+              <div style={AppCss.titulo}>{x.title}</div>
+              <div>{x.author}</div>
+              <div style={AppCss.like}>{x.voteScore}</div>
             </div>
           ))}
           <div style={AppCss.Novo}></div>
