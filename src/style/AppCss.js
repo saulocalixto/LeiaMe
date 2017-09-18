@@ -17,6 +17,13 @@ export const barraMenuStylus = {
   margin: '10px'
 };
 
+export const formularioEstilo = {
+  position:'relative',
+  width: '900px',
+  margin: '150px auto',
+  padding: '10px'
+};
+
 export const selecionaCategoria = {
   position: 'relative',
   right: '0',
@@ -24,6 +31,7 @@ export const selecionaCategoria = {
   width: '40px',
   height: '40px',
   borderRadius: '50%',
+  color: 'black',
   background: '#000099',
   backgroundImage: "url(" + logo + ")",
   backgroundRepeat: 'no-repeat',
