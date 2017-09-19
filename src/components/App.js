@@ -2,31 +2,42 @@ import React, { Component } from "react";
 import * as AppCss from "../style/AppCss.js";
 import Posts from "./Posts.js";
 import NovoPost from "./NovoPost.js";
-import * as ApiCategorias from '../api/ApiCategorias.js'
-import * as ApiPosts from '../api/ApiPosts.js'
-import { fetchPosts, fetchCategorias } from '../actions'
-import { connect } from 'react-redux'
-import { Route } from 'react-router-dom'
-import {Modal, Button} from 'react-bootstrap';
-
+import * as ApiCategorias from "../api/ApiCategorias.js";
+import * as ApiPosts from "../api/ApiPosts.js";
+import * as Map from "./Maps.js";
+import ModalComponent from "./Modal.js";
+import { connect } from "react-redux";
+import { fetchPosts, fetchCategorias } from "../actions";
+import { Route } from "react-router-dom";
 
 class App extends Component {
-
   state = {
     categorias: [],
     posts: [],
     showModal: false
-  }
+  };
 
-guid =() => {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-    s4() + '-' + s4() + s4() + s4();
-  }
+  guid = () => {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return (
+      s4() +
+      s4() +
+      "-" +
+      s4() +
+      "-" +
+      s4() +
+      "-" +
+      s4() +
+      "-" +
+      s4() +
+      s4() +
+      s4()
+    );
+  };
 
   componentWillMount() {
     this.props.allPosts();
@@ -44,34 +55,34 @@ guid =() => {
 
   close = () => {
     this.setState({ showModal: false });
-  }
+  };
 
   open = () => {
     this.setState({ showModal: true });
-  }
+  };
 
-  Submit = (event) => {
+  Submit = event => {
     const formulario = event.target;
-    const title = formulario['idTitulo'].value;
-    const author = formulario['idAutor'].value;
-    const body = formulario['idTextoPost'].value;
-    const category = formulario['idCategoria'].value;
+    const title = formulario["idTitulo"].value;
+    const author = formulario["idAutor"].value;
+    const body = formulario["idTextoPost"].value;
+    const category = formulario["idCategoria"].value;
 
     const posts = {
       id: this.guid(),
-      timestamp: Date.now() / 1000 | 0,
+      timestamp: (Date.now() / 1000) | 0,
       title,
       body,
       author,
       category,
       voteScore: 0,
       deleted: false
-    }
+    };
 
-    ApiPosts.addPost(...posts)
-    .then((posts) => { console.log(posts)
+    ApiPosts.addPost(...posts).then(posts => {
+      console.log(posts);
     });
-  }
+  };
 
   render() {
     return (
@@ -87,41 +98,20 @@ guid =() => {
             </select>
           </div>
         </div>
-        <Route exact path='/' render={() => (
-          <Posts posts={this.props.post} abrirModal={this.open} />
-        )} />
-            <Modal show={this.state.showModal} onHide={this.close}>
-              <Modal.Header closeButton>
-                <Modal.Title>Novo Post</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <NovoPost categorias={this.props.categorias} submit={this.Submit} />
-              </Modal.Body>
-              <Modal.Footer>
-                <Button onClick={this.close}>Close</Button>
-              </Modal.Footer>
-            </Modal>
-        <div style={AppCss.linhaRodaPe} />
-        <div className="rodaPe" style={AppCss.textoRodape}>
-          Copyright Calixto's WebPage
+        <Route exact path="/" render={() => <Posts abrirModal={this.open} />} />
+        <div style={AppCss.linhaRodaPe}>
+          <div className="rodaPe" style={AppCss.textoRodape}>
+            Copyright Calixto's WebPage
+          </div>
         </div>
+        <ModalComponent
+          show={this.state.showModal}
+          close={this.close}
+          component={<NovoPost submit={this.Submit} />}
+        />
       </div>
     );
   }
 }
 
-function mapStateToProps(store) {
-  const posts = store.posts
-  return {
-    ...posts
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    allPosts: () => dispatch(fetchPosts()),
-    allCategorias: () => dispatch(fetchCategorias())
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(Map.mapStateToProps, Map.mapDispatchToProps)(App);

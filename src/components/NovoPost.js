@@ -1,5 +1,7 @@
 import React from 'react'
 import {FormGroup, Form, FormControl,  Button, ControlLabel,HelpBlock} from 'react-bootstrap';
+import { connect } from "react-redux";
+import * as Map from "./Maps.js";
 
 function FieldGroup({ id, label, help, ...props }) {
   return (
@@ -13,6 +15,7 @@ function FieldGroup({ id, label, help, ...props }) {
 
 const NovoPost = (props) => (
   <div>
+    {console.log(props)}
     <Form onSubmit={props.submit}>
       <FieldGroup
         id="idTitulo"
@@ -41,11 +44,12 @@ const NovoPost = (props) => (
       <ControlLabel>Corpo do Post</ControlLabel>
       <FormControl componentClass="textarea" placeholder="Digite seu texto aqui..." />
       </FormGroup>
-      <Button type="submit">
+      <Button type="submit" bsStyle="primary">
         Submit
       </Button>
     </Form>
   </div>
 )
 
-export default NovoPost
+
+export default connect(Map.mapStateToProps, Map.mapDispatchToProps)(NovoPost);

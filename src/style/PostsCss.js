@@ -24,10 +24,7 @@ export const postsIndividuais = {
 export const like = {
   fontSize: 'x-small'
 }
-export const titulo = {
-  fontSize: 'x-large'
-}
 
-export const Novo = {
-  ...AppCss.selecionaCategoria
+export const Botao = {
+  marginTop: '10px'
 }

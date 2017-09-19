@@ -49,15 +49,13 @@ export const select = {
 }
 
 export const linhaRodaPe = {
-  height:'1px', 
-  border:'none', 
-  width: 'auto',
-  backgroundColor:'orange',
-  marginTop: '0px',
-  marginBottom: '0px'
+  position: 'fixed',
+  bottom: '0px',
+  width:'100%',
 }
 
 export const textoRodape = {
   textAlign: 'center',
-  padding: '10px'
+  padding: '10px',
+  color: '#000000'
 }

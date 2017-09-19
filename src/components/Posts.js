@@ -1,29 +1,38 @@
 import React, { Component } from "react";
 import * as AppCss from "../style/PostsCss.js";
-import connect from './App.js'
-import {Button} from 'react-bootstrap';
-import { Link } from 'react-router-dom'
+import * as Map from "./Maps.js";
+import { connect } from "react-redux";
+import { Button, Panel, Accordion } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import App from "./App.js";
 
 class Posts extends Component {
   render() {
-    console.log(this.store)
     return (
       <div style={AppCss.postagens}>
-        <div className="postagens">
-          {this.props.posts.map(x => (
-            <div className="post" style={AppCss.postsIndividuais}>
-              <div style={AppCss.titulo}>{x.title}</div>
-              <div>{x.author}</div>
+        <Accordion>
+        {this.props.post.map((x, index) => (
+
+          <Panel 
+          header={x.title} 
+          bsStyle="primary"
+          eventKey={index + 1}>
+            <div className="post">
+              <div>Autor: {x.author}</div>
+              <div>{x.body}</ div>
               <div style={AppCss.like}>{x.voteScore}</div>
             </div>
-          ))}
-          <div>
-            <Button bsStyle="primary" onClick={this.props.abrirModal}>Novo Post</Button>
-          </div>
+          </Panel>
+        ))}
+        <div style={AppCss.Botao}>
+          <Button bsStyle="primary" onClick={this.props.abrirModal}>
+            Novo Post
+          </Button>
         </div>
+        </Accordion>
       </div>
     );
   }
 }
 
-export default Posts;
+export default connect(Map.mapStateToProps, Map.mapDispatchToProps)(Posts);
