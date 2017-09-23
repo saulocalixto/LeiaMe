@@ -15,7 +15,6 @@ function FieldGroup({ id, label, help, ...props }) {
 
 const NovoPost = (props) => (
   <div>
-    {console.log(props)}
     <Form onSubmit={props.submit}>
       <FieldGroup
         id="idTitulo"

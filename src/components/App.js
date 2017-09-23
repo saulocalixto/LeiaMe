@@ -9,6 +9,7 @@ import ModalComponent from "./Modal.js";
 import { connect } from "react-redux";
 import { fetchPosts, fetchCategorias } from "../actions";
 import { Route } from "react-router-dom";
+import { PageHeader } from 'react-bootstrap'
 
 class App extends Component {
   state = {
@@ -68,7 +69,7 @@ class App extends Component {
     const body = formulario["idTextoPost"].value;
     const category = formulario["idCategoria"].value;
 
-    const posts = {
+    const post = {
       id: this.guid(),
       timestamp: (Date.now() / 1000) | 0,
       title,
@@ -79,24 +80,16 @@ class App extends Component {
       deleted: false
     };
 
-    ApiPosts.addPost(...posts).then(posts => {
-      console.log(posts);
-    });
+    console.log(this.props.posts)
+
+    this.props.addPost(post, this.props.posts);
   };
 
   render() {
     return (
       <div className="wrap">
         <div className="cabeçalho" style={AppCss.barraMenuStylus}>
-          Ninguém Liga para o que você pensa, mas... Fala aí!
-          <div className="barra" />
-          <div className="categoriasMenu" style={AppCss.selecionaCategoria}>
-            <select name="categoria" value="categoria" style={AppCss.select}>
-              {this.props.categorias.map((categoria, indice) => (
-                <option key={indice}>{categoria.name}</option>
-              ))}
-            </select>
-          </div>
+        <PageHeader>Fala aí!</PageHeader>
         </div>
         <Route exact path="/" render={() => <Posts abrirModal={this.open} />} />
         <div style={AppCss.linhaRodaPe}>
@@ -107,7 +100,7 @@ class App extends Component {
         <ModalComponent
           show={this.state.showModal}
           close={this.close}
-          component={<NovoPost submit={this.Submit} />}
+          component={<NovoPost submit={this.Submit}/>}
         />
       </div>
     );

@@ -1,16 +1,18 @@
 import {
   ALL_CATEGORIAS,
   ALL_POSTS,
+  ADD_POST,
   EDITAR_POST
 } from '../actions';
 import { combineReducers } from 'redux'
 
 export const initialState = {
-  post: [ ],
+  posts: [ ],
   categorias: [],
 };
 
 function posts(state = initialState, action) {
+  let posts = [];
   switch(action.type){
       case ALL_CATEGORIAS:
       const categorias = action.categorias
@@ -19,11 +21,20 @@ function posts(state = initialState, action) {
           categorias: categorias
         }
       case ALL_POSTS :
-      const posts = action.post;
+      posts = action.post;
         return {
           ...state,
-          post: posts
+          posts
         };
+      case ADD_POST:
+      posts = action.posts
+        return {
+         ...state,
+         posts
+        }
+      case EDITAR_POST :
+        return {
+        }
       default :
         return state;
   }

@@ -3,6 +3,7 @@ import * as ApiCategorias from '../api/ApiCategorias.js'
 
 export const ALL_CATEGORIAS = 'ALL_CATEGORIAS'
 export const ALL_POSTS = 'ALL_POSTS';
+export const ADD_POST = 'ADD_POST'
 export const EDITAR_POST = 'EDITAR_POST';
 export const ADD_COMENTARIO = 'ADD_COMENTARIO';
 export const EDITAR_COMENTARIO = 'EDITAR_COMENTARIO';
@@ -21,10 +22,10 @@ export const fetchPosts = () => dispatch => (
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
 
-export function editarPost(post) {
+export function editarPost(posts) {
   return {
     type: EDITAR_POST,
-    post
+    posts
   }
 }
 
@@ -38,5 +39,19 @@ export function getAllCategorias(categorias) {
 export const fetchCategorias = () => dispatch => (
   ApiCategorias.getAllCategories().then((categorias) => {
     dispatch(getAllCategorias(categorias))
+  }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
+);
+
+export function addPost(post, posts) {
+  posts = posts.map(x => x.id).includes(post.id) ? posts : posts.concat(post);
+  return {
+    type: ADD_POST,
+    posts
+  }
+}
+
+export const fetchAddPosts = (post, posts) => dispatch => (
+  ApiPosts.addPost(post).then((post) => {
+    dispatch(addPost(post, posts))
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );

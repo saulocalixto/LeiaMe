@@ -13,7 +13,6 @@ export const barraMenuStylus = {
   color: '#FFFFFF',
   fontSize: 'xx-large',
   textAlign: 'center',
-  paddingTop: '30',
   margin: '10px'
 };
 
