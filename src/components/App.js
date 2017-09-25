@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as AppCss from "../style/AppCss.js";
-import Posts from "./Posts.js";
+import ParcialPosts from "./ParcialPosts.js";
+import FullPost from "./FullPost.js"
 import NovoPost from "./NovoPost.js";
 import * as ApiCategorias from "../api/ApiCategorias.js";
 import * as ApiPosts from "../api/ApiPosts.js";
@@ -10,11 +11,15 @@ import { connect } from "react-redux";
 import { fetchPosts, fetchCategorias } from "../actions";
 import { Route } from "react-router-dom";
 import { PageHeader } from 'react-bootstrap'
+import Menu from './Menu.js'
 
 class App extends Component {
   state = {
     categorias: [],
     posts: [],
+    value: '',
+    id: "",
+    post: {},
     showModal: false
   };
 
@@ -40,18 +45,13 @@ class App extends Component {
     );
   };
 
-  componentWillMount() {
-    this.props.allPosts();
-    this.props.allCategorias();
-  }
+handleChange = (e) => {
+  this.setState({ value: e.target.value });
+}
 
   componentDidMount() {
-    // ApiCategorias.getAllCategories().then((categorias) => {
-    //   this.setState({ categorias })
-    // }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
-    // ApiPosts.getAllPosts().then((posts) => {
-    //   this.setState({ posts })
-    // }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
+    this.props.allCategorias();
+    this.props.allPosts();
   }
 
   close = () => {
@@ -62,8 +62,18 @@ class App extends Component {
     this.setState({ showModal: true });
   };
 
-  Submit = event => {
-    const formulario = event.target;
+  setId = (e) => {
+    this.setState({ id: e.target.value });
+  };
+
+  retornaPost = () => {
+    const post = this.props.posts.filter(x => x.id === this.state.id);
+    this.setState({ post });
+    console.log(post)
+    return 
+  }
+
+  Submit = formulario => {
     const title = formulario["idTitulo"].value;
     const author = formulario["idAutor"].value;
     const body = formulario["idTextoPost"].value;
@@ -76,31 +86,47 @@ class App extends Component {
       body,
       author,
       category,
-      voteScore: 0,
-      deleted: false
+      voteScore: 1
     };
 
-    console.log(this.props.posts)
-
     this.props.addPost(post, this.props.posts);
+
+    this.close();
   };
 
+removePost = event => {
+  this.props.deletPost(this.props.posts, event.target.value);
+}
+
   render() {
+    this.props.posts.map(x => this.props.getAllComments(x.id, this.props.posts));
     return (
       <div className="wrap">
-        <div className="cabeçalho" style={AppCss.barraMenuStylus}>
-        <PageHeader>Fala aí!</PageHeader>
+        <div className="cabeçalho">
+          <Menu style={AppCss.barraMenuStylus}/>
         </div>
-        <Route exact path="/" render={() => <Posts abrirModal={this.open} />} />
-        <div style={AppCss.linhaRodaPe}>
-          <div className="rodaPe" style={AppCss.textoRodape}>
-            Copyright Calixto's WebPage
-          </div>
-        </div>
+
+        <Route exact path="/" render={() => 
+          <ParcialPosts 
+            abrirModal={this.open} 
+            setId={this.setId}
+          />} 
+        />
+        <Route path="/post/" render={() => 
+          <FullPost  
+            post={this.state.post} 
+            abrirModal={this.open} 
+            removePost={this.removePost}/> } 
+        />
+
         <ModalComponent
           show={this.state.showModal}
           close={this.close}
-          component={<NovoPost submit={this.Submit}/>}
+          component={<NovoPost 
+          submit={this.Submit} 
+          post={this.props.posts[0]} 
+          handleChange={this.handleChange}
+          value={this.state.value}/>}
         />
       </div>
     );

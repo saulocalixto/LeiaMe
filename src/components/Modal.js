@@ -10,9 +10,6 @@ const ModalComponent = (props) => {
         <Modal.Body>
           {props.component}
         </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={props.close}>Close</Button>
-        </Modal.Footer>
       </Modal>
     )
 }
