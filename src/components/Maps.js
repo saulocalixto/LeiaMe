@@ -1,4 +1,4 @@
-import { fetchPosts, fetchCategorias, fetchAddPosts, fetchDeletPost, fetchgetCommentsPost } from '../actions'
+import { fetchPosts, fetchCategorias, fetchAddPosts, fetchDeletPost, fetchgetCommentsPost, getPost } from '../actions'
 
 export const mapStateToProps = (store) => {
     const data = store.posts
@@ -13,6 +13,7 @@ export const mapDispatchToProps = (dispatch) => {
       allCategorias: () => dispatch(fetchCategorias()),
       addPost: (post, posts) => dispatch(fetchAddPosts(post, posts)),
       deletPost: (posts, id) => dispatch(fetchDeletPost(posts, id)),
-      getAllComments: (id, posts) => dispatch(fetchgetCommentsPost(id, posts))
+      getAllComments: (id, posts) => dispatch(fetchgetCommentsPost(id, posts)),
+      getFullPost: (posts, id) => dispatch(getPost(posts, id))
     }
   }

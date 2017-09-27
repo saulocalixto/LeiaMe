@@ -4,12 +4,14 @@ import {
   ADD_POST,
   EDITAR_POST,
   DELETE_POST,
-  GET_COMMENTS
+  GET_COMMENTS,
+  GET_POST
 } from '../actions';
 import { combineReducers } from 'redux'
 
 export const initialState = {
   posts: [],
+  post: {},
   categorias: [],
 };
 
@@ -34,12 +36,18 @@ function posts(state = initialState, action) {
           posts
         };
       case ADD_POST:
-      let data = { data: new Date(action.post.timestamp).toLocaleString('en-US') }
-      const postData = Object.assign(action.post, data)
-      posts = action.posts.concat(postData);
+        let data = { data: new Date(action.post.timestamp).toLocaleString('en-US') }
+        const postData = Object.assign(action.post, data)
+        posts = action.posts.concat(postData);
         return {
          ...state,
          posts
+        }
+      case GET_POST:
+        const post = action.posts.find(x => x.id === action.id);
+        return {
+          ...state,
+          post
         }
       case EDITAR_POST :
         return {

@@ -1,4 +1,3 @@
-import * as AppCss from "./AppCss.js";
 
 export const postagens = {
   width: '500px',

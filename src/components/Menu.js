@@ -2,13 +2,14 @@ import React from 'react'
 import {Navbar, MenuItem, Nav, NavDropdown} from 'react-bootstrap';
 import * as Map from "./Maps.js";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 const ordenar= [
   {
-    tipo: "Título"
+    tipo: "Quantidade de comentários"
   },
   {
-    tipo: "Quantidade de comentários"
+    tipo: "Título"
   },
   {
     tipo: "Votos"
@@ -20,7 +21,9 @@ const Menu = (props) => {
     <Navbar inverse collapseOnSelect>
     <Navbar.Header>
       <Navbar.Brand>
-        <a href="#">Fala aí!</a>
+      <Link className="close-search" to="/">
+                Fala aí!
+            </Link>
       </Navbar.Brand>
       <Navbar.Toggle />
     </Navbar.Header>

@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import * as AppCss from "../style/PostsCss.js";
-import * as Map from "./Maps.js";
+import * as AppCss from "../../style/PostsCss.js";
+import * as Map from "../Maps.js";
 import HeaderPost from "./HeaderPost.js"
 import { connect } from "react-redux";
-import { Button, Panel, Accordion, Label, Badge } from "react-bootstrap";
+import { Button, Panel } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import App from "./App.js";
-import IconTrash from 'react-icons/lib/md/delete'
-import iconRain from 'react-icons/lib/md/flash-on'
+// import IconTrash from 'react-icons/lib/md/delete'
+// import iconRain from 'react-icons/lib/md/flash-on'
 
 class ParcialPosts extends Component {
   render() {
@@ -28,13 +27,13 @@ class ParcialPosts extends Component {
             eventKey={index + 1}>
               <HeaderPost post={x} />
               <Link className="close-search" to={`/post/${x.id}`}>
-              <Button
-                  value={x.id}
-                  bsStyle="primary"
-                  bsSize="small"
-                  onClick={this.props.setId}>
-                  Abrir
-              </Button>
+                <Button
+                    value={x.id}
+                    bsStyle="primary"
+                    bsSize="small"
+                    onClick={this.props.setId}>
+                    Abrir
+                </Button>
               </Link>
           </Panel>
         ))}

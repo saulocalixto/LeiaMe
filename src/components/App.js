@@ -1,23 +1,21 @@
 import React, { Component } from "react";
 import * as AppCss from "../style/AppCss.js";
-import ParcialPosts from "./ParcialPosts.js";
-import FullPost from "./FullPost.js"
-import NovoPost from "./NovoPost.js";
-import * as ApiCategorias from "../api/ApiCategorias.js";
-import * as ApiPosts from "../api/ApiPosts.js";
+import MainPage from "./MainPage.js";
+import NovoPost from "./Posts/NovoPost.js";
 import * as Map from "./Maps.js";
 import ModalComponent from "./Modal.js";
 import { connect } from "react-redux";
-import { fetchPosts, fetchCategorias } from "../actions";
 import { Route } from "react-router-dom";
-import { PageHeader } from 'react-bootstrap'
-import Menu from './Menu.js'
+import Menu from "./Menu.js";
+import { withRouter } from "react-router-dom";
+import ParcialPosts from "./Posts/ParcialPosts.js";
+import FullPost from "./Posts/FullPost.js"
 
 class App extends Component {
   state = {
     categorias: [],
     posts: [],
-    value: '',
+    value: "",
     id: "",
     post: {},
     showModal: false
@@ -45,9 +43,9 @@ class App extends Component {
     );
   };
 
-handleChange = (e) => {
-  this.setState({ value: e.target.value });
-}
+  handleChange = e => {
+    this.setState({ value: e.target.value });
+  };
 
   componentDidMount() {
     this.props.allCategorias();
@@ -62,16 +60,10 @@ handleChange = (e) => {
     this.setState({ showModal: true });
   };
 
-  setId = (e) => {
-    this.setState({ id: e.target.value });
+  setId = e => {
+    const idPesquisa = e.target.value;
+    this.props.getFullPost(this.props.posts, idPesquisa);
   };
-
-  retornaPost = () => {
-    const post = this.props.posts.filter(x => x.id === this.state.id);
-    this.setState({ post });
-    console.log(post)
-    return 
-  }
 
   Submit = formulario => {
     const title = formulario["idTitulo"].value;
@@ -94,43 +86,58 @@ handleChange = (e) => {
     this.close();
   };
 
-removePost = event => {
-  this.props.deletPost(this.props.posts, event.target.value);
-}
+  removePost = event => {
+    this.props.deletPost(this.props.posts, event.target.value);
+  };
 
   render() {
-    this.props.posts.map(x => this.props.getAllComments(x.id, this.props.posts));
+    this.props.posts.map(x =>
+      this.props.getAllComments(x.id, this.props.posts)
+    );
     return (
       <div className="wrap">
-        <div className="cabeçalho">
-          <Menu style={AppCss.barraMenuStylus}/>
-        </div>
-
-        <Route exact path="/" render={() => 
-          <ParcialPosts 
-            abrirModal={this.open} 
-            setId={this.setId}
-          />} 
+        <Menu />
+        
+        <Route
+          path={`/post/${this.props.post.id}`}
+          render={() => (
+            <FullPost
+              post={this.state.post}
+              abrirModal={this.open}
+              removePost={this.removePost}
+            />
+          )}
         />
-        <Route path="/post/" render={() => 
-          <FullPost  
-            post={this.state.post} 
-            abrirModal={this.open} 
-            removePost={this.removePost}/> } 
+
+        <MainPage
+          component={
+            <Route
+              exact
+              path="/"
+              render={() => (
+                <ParcialPosts setId={this.setId} abrirModal={this.open} />
+              )}
+            />
+          }
         />
 
         <ModalComponent
           show={this.state.showModal}
           close={this.close}
-          component={<NovoPost 
-          submit={this.Submit} 
-          post={this.props.posts[0]} 
-          handleChange={this.handleChange}
-          value={this.state.value}/>}
+          component={
+            <NovoPost
+              submit={this.Submit}
+              post={this.props.posts[0]}
+              handleChange={this.handleChange}
+              value={this.state.value}
+            />
+          }
         />
       </div>
     );
   }
 }
 
-export default connect(Map.mapStateToProps, Map.mapDispatchToProps)(App);
+export default withRouter(
+  connect(Map.mapStateToProps, Map.mapDispatchToProps)(App)
+);

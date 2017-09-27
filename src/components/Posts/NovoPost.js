@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { FormGroup, Form, FormControl, Button, ControlLabel, HelpBlock, Alert } from 'react-bootstrap';
+import { FormGroup, Form, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
 import { connect } from "react-redux";
-import * as Map from "./Maps.js";
-import Modal from './Modal.js'
+import * as Map from "../Maps.js";
 
 
 class NovoPost extends Component {

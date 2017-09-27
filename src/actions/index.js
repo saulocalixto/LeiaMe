@@ -9,6 +9,7 @@ export const EDITAR_POST = 'EDITAR_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const GET_COMMENTS = 'GET_COMMENTS';
 export const EDITAR_COMENTARIO = 'EDITAR_COMENTARIO';
+export const GET_POST = 'GET_POST';
 
 
 export function getAllPosts(posts) {
@@ -71,6 +72,14 @@ export const fetchAddPosts = (post, posts) => dispatch => (
     dispatch(addPost(post, posts))
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
+
+export const getPost = (posts, id) => {
+  return {
+    type: GET_POST,
+    posts,
+    id
+  }
+}
 
 export function getCommentsPost(id, posts, comentarios) {
   return {

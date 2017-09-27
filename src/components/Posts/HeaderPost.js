@@ -1,6 +1,5 @@
-import React, { Component } from "react";
-import { Label, Badge } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Badge } from "react-bootstrap";
 
 const HeaderPost = (props) => {
   return (
