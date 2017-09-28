@@ -97,28 +97,21 @@ class App extends Component {
     return (
       <div className="wrap">
         <Menu />
+
+        <Route exact path="/"
+          render={() => ( <MainPage setId={this.setId} posts={this.props.posts} abrirModal={this.open} />)} />
+
+          {/* <Route exact path="/musica"
+          render={() => ( <MainPage posts={this.props.posts.filter(x => x.category === 'musica')}/>)} /> */}
         
         <Route
           path={`/post/${this.props.post.id}`}
           render={() => (
             <FullPost
-              post={this.state.post}
               abrirModal={this.open}
               removePost={this.removePost}
             />
           )}
-        />
-
-        <MainPage
-          component={
-            <Route
-              exact
-              path="/"
-              render={() => (
-                <ParcialPosts setId={this.setId} abrirModal={this.open} />
-              )}
-            />
-          }
         />
 
         <ModalComponent
