@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import * as AppCss from "../style/AppCss.js";
-import MainPage from "./MainPage.js";
 import NovoPost from "./Posts/NovoPost.js";
 import * as Map from "./Maps.js";
 import ModalComponent from "./Modal.js";
@@ -9,12 +8,13 @@ import { Route } from "react-router-dom";
 import Menu from "./Menu.js";
 import { withRouter } from "react-router-dom";
 import ParcialPosts from "./Posts/ParcialPosts.js";
-import FullPost from "./Posts/FullPost.js"
+import FullPost from "./Posts/FullPost.js";
 
 class App extends Component {
   state = {
     categorias: [],
     posts: [],
+    postsFiltrados: [],
     value: "",
     id: "",
     post: {},
@@ -42,6 +42,19 @@ class App extends Component {
       s4()
     );
   };
+
+  setaFiltro = (filtro) => {
+    if(filtro !== 'ALL') {
+        const postsFiltrados = this.props.posts.filter(post => post.category === filtro)
+        if(postsFiltrados !== this.state.postsFiltrados) {
+          this.setState({ postsFiltrados });
+        }
+    } else {
+      this.setState({postsFiltrados: this.props.posts})
+    }
+    console.log(this.state.postsFiltrados)
+    //next();
+  }
 
   handleChange = e => {
     this.setState({ value: e.target.value });
@@ -98,19 +111,35 @@ class App extends Component {
       <div className="wrap">
         <Menu />
 
-        <Route exact path="/"
-          render={() => ( <MainPage setId={this.setId} abrirModal={this.open} />)} />
+        <Route
+          exact path="/"
+          render={() => (
+            <ParcialPosts
+              posts={this.props.posts}
+              setId={this.setId}
+              abrirModal={this.open}
+            />
+          )}
+        />
 
-          {/* <Route exact path="/musica"
-          render={() => ( <MainPage posts={this.props.posts.filter(x => x.category === 'musica')}/>)} /> */}
-        
+        {this.props.categorias.map(categoria => (
+          <Route
+            exact path={`/${categoria.path}`}
+            //onEnter={this.props.posts.filter(post => post.category === categoria.name)}
+            render={() => (
+              <ParcialPosts
+                posts={this.props.posts.filter(post => post.category === categoria.name)}
+                setId={this.setId}
+                abrirModal={this.open}
+              />
+            )}
+          />
+        ))}
+
         <Route
           path={`/post/${this.props.post.id}`}
           render={() => (
-            <FullPost
-              abrirModal={this.open}
-              removePost={this.removePost}
-            />
+            <FullPost abrirModal={this.open} removePost={this.removePost} />
           )}
         />
 
