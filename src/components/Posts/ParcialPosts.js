@@ -20,8 +20,8 @@ class ParcialPosts extends Component {
           </Button>
         </div>
         {console.log(this.props.posts.length)}
-        {/* <If condition={ this.props.posts > 0 }>
-          <Then> */}
+        <If condition={ this.props.posts != 0 }>
+          <Then>
             <div>
             {this.props.posts.map((x, index) => (
               <Panel
@@ -46,9 +46,9 @@ class ParcialPosts extends Component {
               </Panel>
             ))}
             </div>
-          {/* </Then>
-          <Else><div>Não tem nada aqui!</div></Else>
-        </If> */}
+          </Then>
+          <Else><div style={AppCss.mensagem}>Seja o primeiro a escrever alguma coisa...</div></Else>
+        </If>
       </div>
     );
   }

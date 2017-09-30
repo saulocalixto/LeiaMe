@@ -13,6 +13,7 @@ export const initialState = {
   posts: [],
   post: {},
   categorias: [],
+  loading:true
 };
 
 function posts(state = initialState, action) {
@@ -31,9 +32,11 @@ function posts(state = initialState, action) {
         post = Object.assign(post, data)
         return post;
       })
+      const loading = false;
         return {
           ...state,
-          posts
+          posts,
+          loading
         };
       case ADD_POST:
         let data = { data: new Date(action.post.timestamp).toLocaleString('en-US') }

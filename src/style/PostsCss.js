@@ -17,3 +17,9 @@ export const Botao = {
   marginTop: '10px',
   marginBottom: '10px'
 }
+
+export const mensagem = {
+  textAlign: 'center',
+  fontSize: 'xx-large',
+  color: 'gray'
+}

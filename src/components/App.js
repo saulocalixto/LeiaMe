@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as AppCss from "../style/AppCss.js";
+import * as PostsCss from '../style/PostsCss.js'
 import NovoPost from "./Posts/NovoPost.js";
 import * as Map from "./Maps.js";
 import ModalComponent from "./Modal.js";
@@ -104,13 +105,16 @@ class App extends Component {
   };
 
   render() {
-    this.props.posts.map(x =>
-      this.props.getAllComments(x.id, this.props.posts)
-    );
+    // this.props.posts.map(x =>
+    //   this.props.getAllComments(x.id, this.props.posts)
+    // );
     return (
       <div className="wrap">
         <Menu />
 
+        {this.props.loading ? <div style={PostsCss.mensagem}>Loading...</div> :
+          <div>
+            {console.log(this.props.posts)}
         <Route
           exact path="/"
           render={() => (
@@ -155,6 +159,8 @@ class App extends Component {
             />
           }
         />
+        </div>
+        }
       </div>
     );
   }
