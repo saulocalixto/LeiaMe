@@ -17,8 +17,10 @@ ou
 
 Lembrando que é preciso que o servidor esteja rodando para poder usar as funcionalidades do sistema.
 O servidor pode ser baixado aqui: [Repositório do Servidor].
-Após baixado é preciso entrar na pasta `cd /api-server` e rodar o comando `node server` para que o servidor
-funcione.
+
+Após baixado é preciso entrar na pasta: `cd /api-server` e rodar o comando:
+
+`node server` 
 
 **Salientamos a importância de baixar o servidor indicado nesse documento, pois ele foi modificado para funcionar nesse projeto!**
 
