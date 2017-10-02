@@ -21,5 +21,6 @@ export const Botao = {
 export const mensagem = {
   textAlign: 'center',
   fontSize: 'xx-large',
-  color: 'gray'
+  color: 'gray',
+  margin: '20px'
 }

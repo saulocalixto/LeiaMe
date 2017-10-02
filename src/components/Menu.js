@@ -6,13 +6,20 @@ import { Link } from "react-router-dom";
 
 const ordenar = [
   {
-    tipo: "Quantidade de comentários"
+    tipo: "Quantidade de comentários",
+    sort: "qtdComments"
   },
   {
-    tipo: "Título"
+    tipo: "Categoria",
+    sort: "category"
   },
   {
-    tipo: "Votos"
+    tipo: "Mais Votos",
+    sort: "voteScore"
+  },
+  {
+    tipo: "Mais Recente",
+    sort: "timestamp"
   }
 ]
 
@@ -34,9 +41,15 @@ const Menu = (props) => {
               <MenuItem eventKey={1 + ((index + 1) / 10)} href={`/${categoria.path}`}>{categoria.name}</MenuItem>
             ))}
           </NavDropdown>
-          <NavDropdown eventKey={2} title="Ordenar" id="basic-nav-dropdown">
+          <NavDropdown 
+            eventKey={2} 
+            title="Ordenar" id="basic-nav-dropdown">
             {ordenar.map((x, index) => (
-              <MenuItem eventKey={1 + ((index + 1) / 10)}>{x.tipo}</MenuItem>
+              <MenuItem 
+                eventKey={1 + ((index + 1) / 10)}
+                onClick={() => props.tipoSort(x.sort)}>
+                  {x.tipo}
+              </MenuItem>
             ))}
           </NavDropdown>
         </Nav>

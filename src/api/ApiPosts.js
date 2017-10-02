@@ -47,3 +47,14 @@ fetch(`${api}/posts/${id}`, {
     'Authorization': 'Saulo',
   }
 }).then(res => res.json())
+
+export const votePost = (id, vote) =>
+fetch(`${api}/posts/${id}`, {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Saulo',
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  },
+  body: JSON.stringify({ id, option: vote })
+}).then(res => res.json())

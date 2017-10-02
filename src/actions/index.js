@@ -8,8 +8,12 @@ export const ADD_POST = 'ADD_POST'
 export const EDITAR_POST = 'EDITAR_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const GET_COMMENTS = 'GET_COMMENTS';
+export const ADD_COMMENT = 'ADD_COMMENT';
+export const DELETE_COMMENT = 'DELETE_COMMENT';
+export const VOTE_COMMENT = 'VOTE_COMMENT'
 export const EDITAR_COMENTARIO = 'EDITAR_COMENTARIO';
 export const GET_POST = 'GET_POST';
+export const VOTE_POST = 'VOTE_POST';
 
 
 export function getAllPosts(posts) {
@@ -59,7 +63,7 @@ export const fetchDeletPost = (posts, id) => dispatch => (
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
 
-export function addPost(post, posts) {
+export function AddPost(post, posts) {
   return {
     type: ADD_POST,
     post,
@@ -69,7 +73,7 @@ export function addPost(post, posts) {
 
 export const fetchAddPosts = (post, posts) => dispatch => (
   ApiPosts.addPost(post).then(() => {
-    dispatch(addPost(post, posts))
+    dispatch(AddPost(post, posts))
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
 
@@ -81,17 +85,74 @@ export const getPost = (posts, id) => {
   }
 }
 
-export function getCommentsPost(id, posts, comentarios) {
+export const votePost = (id, vote, posts) => {
+  return {
+    type: VOTE_POST,
+    vote,
+    id,
+    posts
+  }
+}
+
+export const fetchVotePost = (id, vote, posts) => dispatch => (
+  ApiPosts.votePost(id, vote).then(() => {
+    dispatch(votePost(id, vote, posts))
+  }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
+);
+
+export function getCommentsPost(id, comentarios) {
   return {
     type: GET_COMMENTS,
     id,
-    posts,
     comentarios
   }
 }
 
-export const fetchgetCommentsPost = (id, posts) => dispatch => (
+export const fetchgetCommentsPost = (id) => dispatch => (
   ApiComments.getAllCommentPost(id).then((comentarios) => {
-    dispatch(getCommentsPost(id, posts, comentarios))
+    dispatch(getCommentsPost(id, comentarios))
+  }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
+);
+
+export function addComment(comentario, comentarios) {
+  return {
+    type: ADD_COMMENT,
+    comentario,
+    comentarios
+  }
+}
+
+export const fetchAddComment = (comentario, comentarios) => dispatch => (
+  ApiComments.addComment(comentario).then(() => {
+    dispatch(addComment(comentario, comentarios))
+  }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
+);
+
+export function deleteComment(comentarios, id) {
+  return {
+    type: DELETE_COMMENT,
+    comentarios,
+    id
+  }
+}
+
+export const fetchDeleteComment = (comentarios, id) => dispatch => (
+  ApiComments.deleteComment(id).then(() => {
+    dispatch(deleteComment(comentarios, id))
+  }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
+);
+
+export const voteComment = (id, vote, comentarios) => {
+  return {
+    type: VOTE_COMMENT,
+    vote,
+    id,
+    comentarios
+  }
+}
+
+export const fetchVoteComment = (id, vote, comentarios) => dispatch => (
+  ApiComments.voteComment(id, vote).then(() => {
+    dispatch(voteComment(id, vote, comentarios))
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );

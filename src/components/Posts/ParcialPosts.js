@@ -6,12 +6,11 @@ import { connect } from "react-redux";
 import { Button, Panel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { If, Then, Else } from "react-if";
-// import IconTrash from 'react-icons/lib/md/delete'
-// import iconRain from 'react-icons/lib/md/flash-on'
+import IconTrash from 'react-icons/lib/md/delete'
+import iconRain from 'react-icons/lib/md/flash-on'
 
 class ParcialPosts extends Component {
   render() {
-    console.log(this.props.posts);
     return (
       <div style={AppCss.postagens}>
         <div style={AppCss.Botao}>
@@ -19,7 +18,6 @@ class ParcialPosts extends Component {
             Novo Post
           </Button>
         </div>
-        {console.log(this.props.posts.length)}
         <If condition={ this.props.posts != 0 }>
           <Then>
             <div>
@@ -33,6 +31,7 @@ class ParcialPosts extends Component {
                 eventKey={index + 1}
               >
                 <HeaderPost post={x} />
+
                 <Link className="close-search" to={`/post/${x.id}`}>
                   <Button
                     value={x.id}
@@ -47,7 +46,7 @@ class ParcialPosts extends Component {
             ))}
             </div>
           </Then>
-          <Else><div style={AppCss.mensagem}>Seja o primeiro a escrever alguma coisa...</div></Else>
+          <Else><div style={AppCss.mensagem}>Seja o primeiro a compartilhar...</div></Else>
         </If>
       </div>
     );

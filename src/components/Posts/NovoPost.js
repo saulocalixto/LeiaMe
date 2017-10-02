@@ -7,6 +7,7 @@ import * as Map from "../Maps.js";
 class NovoPost extends Component {
 
   formValidation = (event) => {
+    event.preventDefault();
     const formulario = event.target;
     const title = formulario["idTitulo"].value;
     const author = formulario["idAutor"].value;
@@ -22,8 +23,7 @@ class NovoPost extends Component {
 
   FieldGroup = ({ id, label, help, ...props }) => {
     return (
-      <FormGroup controlId={id}
-        onChange={this.props.handleChange}>
+      <FormGroup controlId={id} >
         <ControlLabel>{label}</ControlLabel>
         <FormControl />
         {help && <HelpBlock>Campo não pode estar vazio.</HelpBlock>}
@@ -67,7 +67,7 @@ class NovoPost extends Component {
               style={{ height: 220 }} />
           </FormGroup>
           <Button type="submit" bsStyle="primary">
-            Submit
+            Salvar
           </Button>
         </Form>
 

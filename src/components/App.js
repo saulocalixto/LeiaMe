@@ -10,56 +10,28 @@ import Menu from "./Menu.js";
 import { withRouter } from "react-router-dom";
 import ParcialPosts from "./Posts/ParcialPosts.js";
 import FullPost from "./Posts/FullPost.js";
+import * as ApiPosts from '../api/ApiPosts.js'
+import sortBy from 'sort-by'
 
 class App extends Component {
   state = {
-    categorias: [],
-    posts: [],
-    postsFiltrados: [],
-    value: "",
+    sort: 'voteScore',
     id: "",
-    post: {},
-    showModal: false
+    showModal: false,
+    showComments: false
   };
 
-  guid = () => {
-    function s4() {
-      return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
-    }
-    return (
-      s4() +
-      s4() +
-      "-" +
-      s4() +
-      "-" +
-      s4() +
-      "-" +
-      s4() +
-      "-" +
-      s4() +
-      s4() +
-      s4()
-    );
-  };
-
-  setaFiltro = (filtro) => {
-    if(filtro !== 'ALL') {
-        const postsFiltrados = this.props.posts.filter(post => post.category === filtro)
-        if(postsFiltrados !== this.state.postsFiltrados) {
-          this.setState({ postsFiltrados });
-        }
-    } else {
-      this.setState({postsFiltrados: this.props.posts})
-    }
-    console.log(this.state.postsFiltrados)
-    //next();
-  }
+  vote = (id, vote) => {
+    ApiPosts.votePost(id, vote).then();
+};
 
   handleChange = e => {
     this.setState({ value: e.target.value });
   };
+
+  tipoSort = sort => {
+    this.setState({sort});
+  }
 
   componentDidMount() {
     this.props.allCategorias();
@@ -74,25 +46,29 @@ class App extends Component {
     this.setState({ showModal: true });
   };
 
-  setId = e => {
-    const idPesquisa = e.target.value;
-    this.props.getFullPost(this.props.posts, idPesquisa);
+  openComment = () => {
+    this.setState({ showComments: !this.state.showComments });
   };
 
-  Submit = formulario => {
+  setId = e => {
+    const id = e.target.value
+    this.props.getFullPost(this.props.posts, id);
+    this.props.getAllComments(id);
+  };
+
+  SubmitPost = formulario => {
     const title = formulario["idTitulo"].value;
     const author = formulario["idAutor"].value;
     const body = formulario["idTextoPost"].value;
     const category = formulario["idCategoria"].value;
 
     const post = {
-      id: this.guid(),
-      timestamp: (Date.now() / 1000) | 0,
+      id: this.props.guid,
+      timestamp: Date.now(),
       title,
       body,
       author,
-      category,
-      voteScore: 1
+      category
     };
 
     this.props.addPost(post, this.props.posts);
@@ -105,61 +81,69 @@ class App extends Component {
   };
 
   render() {
-    // this.props.posts.map(x =>
-    //   this.props.getAllComments(x.id, this.props.posts)
-    // );
     return (
       <div className="wrap">
-        <Menu />
 
-        {this.props.loading ? <div style={PostsCss.mensagem}>Loading...</div> :
+        <Menu tipoSort={this.tipoSort} />
+
+        {this.props.loading ? 
+          <div style={PostsCss.mensagem}>Loading...</div> 
+          :
           <div>
-            {console.log(this.props.posts)}
-        <Route
-          exact path="/"
-          render={() => (
-            <ParcialPosts
-              posts={this.props.posts}
-              setId={this.setId}
-              abrirModal={this.open}
+            <Route
+              exact path="/"
+              render={() => (
+                <ParcialPosts
+                  posts={this.props.posts.sort(sortBy(this.state.sort)).reverse()}
+                  setId={this.setId}
+                  abrirModal={this.open}
+                />
+              )}
             />
-          )}
-        />
 
-        {this.props.categorias.map(categoria => (
-          <Route
-            exact path={`/${categoria.path}`}
-            //onEnter={this.props.posts.filter(post => post.category === categoria.name)}
-            render={() => (
-              <ParcialPosts
-                posts={this.props.posts.filter(post => post.category === categoria.name)}
-                setId={this.setId}
-                abrirModal={this.open}
+            {this.props.categorias.map(categoria => (
+              <Route
+                exact path={`/${categoria.path}`}
+                render={() => (
+                  <ParcialPosts
+                    posts={this.props.posts
+                      .filter(post => post.category === categoria.name)
+                      .sort(sortBy(this.state.sort))
+                      .reverse()}
+                    setId={this.setId}
+                    abrirModal={this.open}
+                  />
+                )}
               />
-            )}
-          />
-        ))}
+            ))}
+            {this.props.posts.map(post => (
+              <Route
+                exact path={`/post/${post.id}`}
+                render={() => (
+                  <FullPost 
+                    abrirModal={this.open} 
+                    removePost={this.removePost} 
+                    vote={this.vote}
+                    show={this.state.showComments}
+                    open={this.openComment}
+                    close={this.closeComment}
+                    postUnico={this.props.posts.find(x => x.id === post.id)} />
+                )}
+              />
+            ))}
 
-        <Route
-          path={`/post/${this.props.post.id}`}
-          render={() => (
-            <FullPost abrirModal={this.open} removePost={this.removePost} />
-          )}
-        />
-
-        <ModalComponent
-          show={this.state.showModal}
-          close={this.close}
-          component={
-            <NovoPost
-              submit={this.Submit}
-              post={this.props.posts[0]}
-              handleChange={this.handleChange}
-              value={this.state.value}
+            <ModalComponent
+              show={this.state.showModal}
+              close={this.close}
+              component={
+                <NovoPost
+                  submit={this.SubmitPost}
+                  post={this.props.posts[0]}
+                  handleChange={this.handleChange}
+                />
+              }
             />
-          }
-        />
-        </div>
+          </div>
         }
       </div>
     );
