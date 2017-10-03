@@ -40,7 +40,8 @@ const FullPost = (props) => {
                 <div style={{ textAlign: 'justify' }}><p> {props.postUnico.body}</p> </div>
                 <div style={{ marginTop: '20px' }}>
                     <Link to='#'>
-                        <BotaoEditar size={'40px'} />
+                        <BotaoEditar size={'40px'} 
+                        onClick={() => props.abrirModal()}/>
                     </Link>
                     <Link className="close-search" to="/">
                         <IconTrash

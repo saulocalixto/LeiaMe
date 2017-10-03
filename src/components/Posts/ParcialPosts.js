@@ -37,7 +37,7 @@ class ParcialPosts extends Component {
                     value={x.id}
                     bsStyle="primary"
                     bsSize="small"
-                    onClick={this.props.setId}
+                    onClick={() => this.props.setId(x.id)}
                   >
                     Abrir
                   </Button>

@@ -25,10 +25,6 @@ class App extends Component {
     ApiPosts.votePost(id, vote).then();
 };
 
-  handleChange = e => {
-    this.setState({ value: e.target.value });
-  };
-
   tipoSort = sort => {
     this.setState({sort});
   }
@@ -50,8 +46,7 @@ class App extends Component {
     this.setState({ showComments: !this.state.showComments });
   };
 
-  setId = e => {
-    const id = e.target.value
+  setId = id => {
     this.props.getFullPost(this.props.posts, id);
     this.props.getAllComments(id);
   };
@@ -74,10 +69,6 @@ class App extends Component {
     this.props.addPost(post, this.props.posts);
 
     this.close();
-  };
-
-  removePost = event => {
-    this.props.deletPost(this.props.posts, event.target.value);
   };
 
   render() {
@@ -126,7 +117,6 @@ class App extends Component {
                     vote={this.vote}
                     show={this.state.showComments}
                     open={this.openComment}
-                    close={this.closeComment}
                     postUnico={this.props.posts.find(x => x.id === post.id)} />
                 )}
               />
