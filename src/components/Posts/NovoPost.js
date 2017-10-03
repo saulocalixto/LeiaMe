@@ -38,7 +38,7 @@ class NovoPost extends Component {
           <this.FieldGroup
             id="idTitulo"
             type="text"
-            value=""
+            value="Saulo"
             label="Título"
             placeholder="Digite o título"
           />
@@ -46,7 +46,7 @@ class NovoPost extends Component {
           <this.FieldGroup
             id="idAutor"
             type="text"
-            value=""
+            value="Saulo"
             label="Autor"
             placeholder="Digite o autor"
           />

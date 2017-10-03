@@ -54,7 +54,8 @@ class CommentsView extends Component {
 
             <FormGroup controlId="idAutor">
               <FormControl type="text"
-                placeholder="Digite seu nome aqui..." />
+                placeholder="Digite seu nome aqui..." 
+                defaultValue={"Saulo"}/>
             </FormGroup>
 
 
