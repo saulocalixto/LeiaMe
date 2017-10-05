@@ -93,6 +93,7 @@ const FullPost = (props) => {
                     </Panel>
                 </div>
             }
+                
         </div>
     )
 }

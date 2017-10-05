@@ -60,8 +60,12 @@ function posts(state = initialState, action) {
         loading: true
       }
     case EDITAR_POST:
-      return {
-      }
+      let postEditar = Object.assign(action.post, action.id);
+      posts = action.posts.filter(x => x.id !== action.id).concat(postEditar);
+        return {
+          ...state,
+          posts
+        }
     case DELETE_POST:
       posts = action.posts.filter(x => x.id !== action.id)
       return {

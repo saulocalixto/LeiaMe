@@ -51,26 +51,6 @@ class App extends Component {
     this.props.getAllComments(id);
   };
 
-  SubmitPost = formulario => {
-    const title = formulario["idTitulo"].value;
-    const author = formulario["idAutor"].value;
-    const body = formulario["idTextoPost"].value;
-    const category = formulario["idCategoria"].value;
-
-    const post = {
-      id: this.props.guid,
-      timestamp: Date.now(),
-      title,
-      body,
-      author,
-      category
-    };
-
-    this.props.addPost(post, this.props.posts);
-
-    this.close();
-  };
-
   render() {
     return (
       <div className="wrap">
@@ -130,6 +110,7 @@ class App extends Component {
                   submit={this.SubmitPost}
                   post={this.props.posts[0]}
                   handleChange={this.handleChange}
+                  close={this.close}
                 />
               }
             />

@@ -29,12 +29,20 @@ export const fetchPosts = () => dispatch => (
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
 
-export function editarPost(posts) {
+export function editarPost(id, post, posts) {
   return {
     type: EDITAR_POST,
-    posts
+    posts,
+    post,
+    id
   }
 }
+
+export const fetchEditPosts = (id, post, posts) => dispatch => (
+  ApiPosts.editPost(id, post).then(() => {
+    dispatch(editarPost(id, post, posts))
+  }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
+);
 
 export function getAllCategorias(categorias) {
   return {

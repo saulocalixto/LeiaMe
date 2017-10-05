@@ -9,11 +9,29 @@ class NovoPost extends Component {
   formValidation = (event) => {
     event.preventDefault();
     const formulario = event.target;
+
     const title = formulario["idTitulo"].value;
     const author = formulario["idAutor"].value;
-
+    const body = formulario["idTextoPost"].value;
+    const category = formulario["idCategoria"].value;
+    const id = this.props.guid;
     if (title !== "" && author !== "") {
-      this.props.submit(formulario)
+      if(Object.keys(this.props.post).length === 0) {
+        let postAdd = {
+          id,
+          timestamp: Date.now(),
+          title,
+          body,
+          author,
+          category
+        };
+        this.props.addPost(postAdd, this.props.posts);
+      } else {
+        const postEdit = { title, body, author, category }
+        const idEdit = this.props.post.id;
+        this.props.editPost(idEdit, postEdit, this.props.posts);
+      }
+      this.props.close();
     }
     else {
       event.preventDefault();
@@ -26,7 +44,7 @@ class NovoPost extends Component {
       <div>
         <Form onSubmit={this.formValidation}>
           <FormGroup controlId="idTitulo">
-            <ControlLabel>Autor</ControlLabel>
+            <ControlLabel>Título</ControlLabel>
             <FormControl type="text"
               placeholder="Digite o título do post..."
               defaultValue={this.props.post.title} />

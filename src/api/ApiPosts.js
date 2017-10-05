@@ -28,7 +28,7 @@ export const getPost = (id) =>
   .then(res => res.json());
 
 
-export const editPost = (id, post) =>
+  export const editPost = (id, post) =>
   fetch(`${api}/posts/${id}`, {
     method: 'PUT',
     headers: {
@@ -36,9 +36,9 @@ export const editPost = (id, post) =>
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
-    body: JSON.stringify(post)
-  }).then(res => res.json())
-    .then(data => data);
+    body: JSON.stringify( {id, ...post} )
+  })
+    .then(res => {res.json()});
 
 export const deletPost = (id) =>
 fetch(`${api}/posts/${id}`, {
