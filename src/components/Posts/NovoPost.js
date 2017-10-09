@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FormGroup, Form, FormControl, Button, ControlLabel, HelpBlock } from 'react-bootstrap';
+import { FormGroup, Form, FormControl, Button, ControlLabel } from 'react-bootstrap';
 import { connect } from "react-redux";
 import * as Map from "../Maps.js";
 
@@ -14,9 +14,9 @@ class NovoPost extends Component {
     const author = formulario["idAutor"].value;
     const body = formulario["idTextoPost"].value;
     const category = formulario["idCategoria"].value;
-    const id = this.props.guid;
+    const id = this.props.guid();
     if (title !== "" && author !== "") {
-      if(Object.keys(this.props.post).length === 0) {
+      if (Object.keys(this.props.post).length === 0) {
         let postAdd = {
           id,
           timestamp: Date.now(),
@@ -27,10 +27,24 @@ class NovoPost extends Component {
         };
         this.props.addPost(postAdd, this.props.posts);
       } else {
-        const postEdit = { title, body, author, category }
+        const voteScore = this.props.post.voteScore
+        const data = this.props.post.data
+        const comentarios = this.props.post.comentarios
         const idEdit = this.props.post.id;
+        const postEdit = {
+          id: idEdit,
+          title,
+          body,
+          author,
+          category,
+          voteScore,
+          comentarios,
+          data
+        }
+
         this.props.editPost(idEdit, postEdit, this.props.posts);
       }
+
       this.props.close();
     }
     else {
@@ -87,5 +101,14 @@ class NovoPost extends Component {
   }
 }
 
+export const mapStateToProps = (store) => {
+  const categorias = store.categorias
+  const posts = store.posts["posts"]
+  return {
+    ...categorias,
+    posts
+  }
+}
 
-export default connect(Map.mapStateToProps, Map.mapDispatchToProps)(NovoPost);
+
+export default connect(mapStateToProps, Map.mapDispatchToProps)(NovoPost);

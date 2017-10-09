@@ -6,10 +6,15 @@ import { connect } from "react-redux";
 import { Button, Panel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { If, Then, Else } from "react-if";
-import IconTrash from 'react-icons/lib/md/delete'
-import iconRain from 'react-icons/lib/md/flash-on'
 
 class ParcialPosts extends Component {
+
+  componentDidMount = () => {
+    this.props.posts.map(post => {
+      return this.props.getAllComments(post.id, post);
+    })
+  }
+
   render() {
     return (
       <div style={AppCss.postagens}>
@@ -18,32 +23,32 @@ class ParcialPosts extends Component {
             Novo Post
           </Button>
         </div>
-        <If condition={ this.props.posts != 0 }>
+        <If condition={this.props.posts !== 0}>
           <Then>
             <div>
-            {this.props.posts.map((x, index) => (
-              <Panel
-                header={`${x.title} || Por: ${x.author}`}
-                bsStyle="primary"
-                key={x.id}
-                value={x.id}
-                style={AppCss.Painel}
-                eventKey={index + 1}
-              >
-                <HeaderPost post={x} />
+              {this.props.posts.map((x, index) => (
+                <Panel
+                  header={`${x.title} || Por: ${x.author}`}
+                  bsStyle="primary"
+                  key={x.id}
+                  value={x.id}
+                  style={AppCss.Painel}
+                  eventKey={index + 1}
+                >
+                  <HeaderPost post={x} />
 
-                <Link className="close-search" to={`/post/${x.id}`}>
-                  <Button
-                    value={x.id}
-                    bsStyle="primary"
-                    bsSize="small"
-                    onClick={() => this.props.setId(x.id)}
-                  >
-                    Abrir
+                  <Link className="close-search" to={`/post/${x.id}`}>
+                    <Button
+                      value={x.id}
+                      bsStyle="primary"
+                      bsSize="small"
+                      onClick={() => this.props.setId(x.id)}
+                    >
+                      Abrir
                   </Button>
-                </Link>
-              </Panel>
-            ))}
+                  </Link>
+                </Panel>
+              ))}
             </div>
           </Then>
           <Else><div style={AppCss.mensagem}>Seja o primeiro a compartilhar...</div></Else>
@@ -52,4 +57,5 @@ class ParcialPosts extends Component {
     );
   }
 }
-export default ParcialPosts;
+
+export default connect(Map.mapStateToProps, Map.mapDispatchToProps)(ParcialPosts);

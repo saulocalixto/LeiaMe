@@ -18,17 +18,17 @@ export const addPost = (post) =>
     },
     body: JSON.stringify(post)
   })
-    .then(res => {res.json()});
+    .then(res => { res.json() });
 
 export const getPost = (id) =>
   fetch(`${api}/posts:${id}`, {
     headers,
     method: 'GET'
   })
-  .then(res => res.json());
+    .then(res => res.json());
 
 
-  export const editPost = (id, post) =>
+export const editPost = (id, post) =>
   fetch(`${api}/posts/${id}`, {
     method: 'PUT',
     headers: {
@@ -36,25 +36,25 @@ export const getPost = (id) =>
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
-    body: JSON.stringify( {id, ...post} )
+    body: JSON.stringify({ id, ...post })
   })
-    .then(res => {res.json()});
+    .then(res => { res.json() });
 
 export const deletPost = (id) =>
-fetch(`${api}/posts/${id}`, {
-  method: 'DELETE',
-  headers: {
-    'Authorization': 'Saulo',
-  }
-}).then(res => res.json())
+  fetch(`${api}/posts/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'Saulo',
+    }
+  }).then(res => res.json())
 
 export const votePost = (id, vote) =>
-fetch(`${api}/posts/${id}`, {
-  method: 'POST',
-  headers: {
-    'Authorization': 'Saulo',
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  },
-  body: JSON.stringify({ id, option: vote })
-}).then(res => res.json())
+  fetch(`${api}/posts/${id}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Saulo',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({ id, option: vote })
+  }).then(res => res.json())

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Navbar, MenuItem, Nav, NavDropdown } from 'react-bootstrap';
-import * as Map from "./Maps.js";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -20,6 +19,14 @@ const ordenar = [
   {
     tipo: "Mais Recente",
     sort: "timestamp"
+  },
+  {
+    tipo: "Título",
+    sort: "titulo"
+  },
+  {
+    tipo: "Autor",
+    sort: "autor"
   }
 ]
 
@@ -38,17 +45,23 @@ const Menu = (props) => {
         <Nav>
           <NavDropdown eventKey={1} title="Categorias" id="basic-nav-dropdown">
             {props.categorias.map((categoria, index) => (
-              <MenuItem eventKey={1 + ((index + 1) / 10)} href={`/${categoria.path}`}>{categoria.name}</MenuItem>
+              <MenuItem
+                eventKey={1 + ((index + 1) / 10)}
+                href={`/${categoria.path}`}
+                key={index}>
+                {categoria.name}
+              </MenuItem>
             ))}
           </NavDropdown>
-          <NavDropdown 
-            eventKey={2} 
+          <NavDropdown
+            eventKey={2}
             title="Ordenar" id="basic-nav-dropdown">
             {ordenar.map((x, index) => (
-              <MenuItem 
+              <MenuItem
+                key={index}
                 eventKey={1 + ((index + 1) / 10)}
                 onClick={() => props.tipoSort(x.sort)}>
-                  {x.tipo}
+                {x.tipo}
               </MenuItem>
             ))}
           </NavDropdown>
@@ -58,4 +71,11 @@ const Menu = (props) => {
   )
 }
 
-export default connect(Map.mapStateToProps, Map.mapDispatchToProps)(Menu);
+export const mapStateToProps = (store) => {
+  const categorias = store.categorias
+  return {
+    ...categorias,
+  }
+}
+
+export default connect(mapStateToProps)(Menu);

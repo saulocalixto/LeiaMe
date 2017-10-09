@@ -28,7 +28,7 @@ export const deleteComment = (id) =>
     }
   }).then(res => res.json())
 
-  export const voteComment = (id, vote) =>
+export const voteComment = (id, vote) =>
   fetch(`${api}/comments/${id}`, {
     method: 'POST',
     headers: {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FormGroup, Form, FormControl, Button, ControlLabel, Well, OverlayTrigger, Panel, HelpBlock, Grid, Row, Col } from 'react-bootstrap';
+import { FormGroup, Form, FormControl, Button, Well, OverlayTrigger, Panel, HelpBlock } from 'react-bootstrap';
 import * as PostsCss from "../../style/PostsCss.js";
 import Like from 'react-icons/lib/ti/thumbs-up'
 import NotLike from 'react-icons/lib/ti/thumbs-down'
@@ -35,7 +35,8 @@ class CommentsView extends Component {
         author,
         parentId
       }
-      this.props.addComment(comment, this.props.comentarios);
+      const posts = this.props.posts.find(x => x.id === this.props.parentId);
+      this.props.addComment(comment, posts);
       formulario.reset()
     }
     else {
@@ -47,15 +48,13 @@ class CommentsView extends Component {
   render() {
     return (
       <div style={{ textAlign: 'left' }}>
-
         <Well bsSize="small">
           <Form onSubmit={this.formValidation}>
             <div style={PostsCss.mensagem}>Comentários:</div>
 
             <FormGroup controlId="idAutor">
               <FormControl type="text"
-                placeholder="Digite seu nome aqui..." 
-                defaultValue={"Saulo"}/>
+                placeholder="Digite seu nome aqui..." />
             </FormGroup>
 
 
@@ -72,7 +71,7 @@ class CommentsView extends Component {
         </Well>
 
         {this.props.comentarios.map(x => (
-          <div style={{ marginTop: '15px' }}>
+          <div style={{ marginTop: '15px' }} key={x.id}>
             <Panel header={`Por: ${x.author}`} eventKey="1" >
 
               <div style={{ marginTop: '10px' }}>{x.body}</div>
@@ -99,7 +98,7 @@ class CommentsView extends Component {
                 <Link to='#' >
                   <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={this.props.popoverHoverFocus("Deleta")}>
                     <IconTrash size={'30px'} style={{ textAlign: 'left', color: 'red', marginLeft: '5px' }}
-                      onClick={() => this.props.deleteComment(this.props.comentarios, x.id)} />
+                      onClick={() => this.props.deleteComment(this.props.post, x.id)} />
                   </OverlayTrigger>
                 </Link>
                 <span style={{ marginLeft: '230px' }}><strong>Data</strong>: {x.data}</span>
@@ -112,4 +111,5 @@ class CommentsView extends Component {
     )
   }
 }
+
 export default connect(Map.mapStateToProps, Map.mapDispatchToProps)(CommentsView)

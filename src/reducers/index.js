@@ -2,6 +2,7 @@ import {
   ALL_CATEGORIAS,
   ALL_POSTS,
   ADD_POST,
+  ORDENA_POSTS,
   EDITAR_POST,
   DELETE_POST,
   GET_COMMENTS,
@@ -16,26 +17,17 @@ import sortBy from 'sort-by'
 
 export const initialState = {
   posts: [],
-  post: {},
-  categorias: [],
-  comentarios: [],
   loading: true
 };
 
 function posts(state = initialState, action) {
   let posts = [];
   switch (action.type) {
-    case ALL_CATEGORIAS:
-      const categorias = action.categorias
-      return {
-        ...state,
-        categorias
-      }
     case ALL_POSTS:
       let postsProvisorios = action.posts;
       posts = postsProvisorios.map(post => {
         let data = { data: new Date(post.timestamp).toLocaleString('pt-BR') }
-        post = Object.assign(post, data)
+        post = Object.assign(post, data, { comentarios: [] })
         return post;
       }).filter(x => x.title !== undefined).sort(sortBy('voteScore')).reverse()
       const loading = false;
@@ -46,26 +38,54 @@ function posts(state = initialState, action) {
       };
     case ADD_POST:
       let data = { data: new Date(action.post.timestamp).toLocaleString('pt-BR') }
-      const postData = Object.assign(action.post, data, { voteScore: 1 })
+      const postData = Object.assign(action.post, data, { voteScore: 1 }, { comentarios: [] })
       posts = action.posts.concat(postData);
       return {
         ...state,
         posts
       }
+    case ORDENA_POSTS: {
+      switch (action.escolha) {
+        case "qtdComments":
+          posts = action.posts.sort(sortBy("comentarios")).reverse();
+          break
+        case "category":
+          posts = action.posts.sort(sortBy("category"));
+          break;
+        case "voteScore":
+          posts = action.posts.sort(sortBy("voteScore")).reverse();
+          break;
+        case "timestamp":
+          posts = action.posts.sort(sortBy("timestamp")).reverse();
+          break;
+        case "titulo":
+          posts = action.posts.sort(sortBy("title"));
+          break;
+        case "autor":
+          posts = action.posts.sort(sortBy("author"));
+            break;
+        default:
+          posts = action.posts.sort(sortBy("voteScore")).reverse();
+      }
+
+      return {
+        ...state,
+        posts
+      }
+    }
     case GET_POST:
       const post = action.posts.find(x => x.id === action.id);
       return {
         ...state,
-        post,
-        loading: true
+        post
       }
     case EDITAR_POST:
-      let postEditar = Object.assign(action.post, action.id);
+      let postEditar = Object.assign(action.post, { id: action.id });
       posts = action.posts.filter(x => x.id !== action.id).concat(postEditar);
-        return {
-          ...state,
-          posts
-        }
+      return {
+        ...state,
+        posts
+      }
     case DELETE_POST:
       posts = action.posts.filter(x => x.id !== action.id)
       return {
@@ -74,7 +94,6 @@ function posts(state = initialState, action) {
       }
     case VOTE_POST:
       const postVote = action.posts.find(x => x.id === action.id);
-      console.log(postVote)
       switch (action.vote) {
         case "upVote":
           postVote.voteScore += 1;
@@ -85,39 +104,59 @@ function posts(state = initialState, action) {
         case "loved":
           postVote.voteScore += 3;
           break
+        default:
+          console.log("Opção inválida.")
       }
-
       posts = action.posts.filter(x => x.id !== action.id).concat(postVote);
 
       return {
         ...state,
         posts
       }
+    default:
+      return state;
+  }
+}
 
+function categorias(state = { categorias: [] }, action) {
+  switch (action.type) {
+    case ALL_CATEGORIAS:
+      const categorias = action.categorias
+      return {
+        ...state,
+        categorias
+      }
+    default:
+      return state;
+  }
+}
+
+function comentarios(state = { loadingComentarios: true }, action) {
+  let comentarios;
+  switch (action.type) {
     case GET_COMMENTS:
       const comments = action.comentarios.map(comentario => {
         let data = { data: new Date(comentario.timestamp).toLocaleString('pt-BR') }
         comentario = Object.assign(comentario, data)
         return comentario;
       }).filter(comentario => comentario.author !== undefined)
+      Object.assign(action.post, { comentarios: comments })
       return {
         ...state,
-        comentarios: comments,
-        loading: false
+        loadingComentarios: false
       }
     case ADD_COMMENT:
       let dataComment = { data: new Date(action.comentario.timestamp).toLocaleString('pt-BR') }
       const comentarioData = Object.assign(action.comentario, dataComment, { voteScore: 1 })
-      const comentarios = action.comentarios.concat(comentarioData);
+      action.posts.comentarios.push(comentarioData);
       return {
-        ...state,
-        comentarios
+        ...state
       }
     case DELETE_COMMENT:
-      const coments = action.comentarios.filter(x => x.id !== action.id)
+      comentarios = action.post.comentarios.filter(x => x.id !== action.id)
+      action.post.comentarios = comentarios;
       return {
-        ...state,
-        comentarios: coments
+        ...state
       }
     case VOTE_COMMENT:
       const commentVote = action.comentarios.find(x => x.id === action.id);
@@ -128,19 +167,23 @@ function posts(state = initialState, action) {
         case "downVote":
           commentVote.voteScore -= 1;
           break
+        default:
+          console.log("Opção inválida.");
       }
-
-      const comentariosVote = action.comentarios.filter(x => x.id !== action.id).concat(commentVote);
+      action.comentarios.filter(x => x.id !== action.id).concat(commentVote);
 
       return {
-        ...state,
-        comentarios: comentariosVote
+        ...state
       }
     default:
-      return state;
+      return {
+        ...state
+      }
   }
 }
 
 export default combineReducers({
   posts,
+  categorias,
+  comentarios
 })

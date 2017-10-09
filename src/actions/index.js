@@ -3,17 +3,21 @@ import * as ApiComments from '../api/ApiComments.js'
 import * as ApiCategorias from '../api/ApiCategorias.js'
 
 export const ALL_CATEGORIAS = 'ALL_CATEGORIAS'
+///Posts///
 export const ALL_POSTS = 'ALL_POSTS';
 export const ADD_POST = 'ADD_POST'
 export const EDITAR_POST = 'EDITAR_POST';
 export const DELETE_POST = 'DELETE_POST';
+export const GET_POST = 'GET_POST';
+export const VOTE_POST = 'VOTE_POST';
+export const ORDENA_POSTS = 'ORDENA_POSTS';
+
+///Comentários///
 export const GET_COMMENTS = 'GET_COMMENTS';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
 export const VOTE_COMMENT = 'VOTE_COMMENT'
 export const EDITAR_COMENTARIO = 'EDITAR_COMENTARIO';
-export const GET_POST = 'GET_POST';
-export const VOTE_POST = 'VOTE_POST';
 
 
 export function getAllPosts(posts) {
@@ -35,6 +39,14 @@ export function editarPost(id, post, posts) {
     posts,
     post,
     id
+  }
+}
+
+export function ordenaPosts(posts, escolha) {
+  return {
+    type: ORDENA_POSTS,
+    posts,
+    escolha
   }
 }
 
@@ -108,45 +120,46 @@ export const fetchVotePost = (id, vote, posts) => dispatch => (
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
 
-export function getCommentsPost(id, comentarios) {
+export function getCommentsPost(id, comentarios, post) {
   return {
     type: GET_COMMENTS,
     id,
-    comentarios
+    comentarios,
+    post
   }
 }
 
-export const fetchgetCommentsPost = (id) => dispatch => (
+export const fetchgetCommentsPost = (id, post) => dispatch => (
   ApiComments.getAllCommentPost(id).then((comentarios) => {
-    dispatch(getCommentsPost(id, comentarios))
+    dispatch(getCommentsPost(id, comentarios, post))
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
 
-export function addComment(comentario, comentarios) {
+export function addComment(comentario, posts) {
   return {
     type: ADD_COMMENT,
     comentario,
-    comentarios
+    posts
   }
 }
 
-export const fetchAddComment = (comentario, comentarios) => dispatch => (
+export const fetchAddComment = (comentario, posts) => dispatch => (
   ApiComments.addComment(comentario).then(() => {
-    dispatch(addComment(comentario, comentarios))
+    dispatch(addComment(comentario, posts))
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
 
-export function deleteComment(comentarios, id) {
+export function deleteComment(post, id) {
   return {
     type: DELETE_COMMENT,
-    comentarios,
+    post,
     id
   }
 }
 
-export const fetchDeleteComment = (comentarios, id) => dispatch => (
+export const fetchDeleteComment = (post, id) => dispatch => (
   ApiComments.deleteComment(id).then(() => {
-    dispatch(deleteComment(comentarios, id))
+    dispatch(deleteComment(post, id))
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
 
