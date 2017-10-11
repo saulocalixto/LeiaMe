@@ -10,7 +10,8 @@ import {
   fetchVotePost,
   fetchDeleteComment,
   fetchVoteComment,
-  ordenaPosts
+  ordenaPosts,
+  MudaViewComment
 } from '../actions'
 
 export const guid = () => {
@@ -60,6 +61,7 @@ export const mapDispatchToProps = (dispatch) => {
     votePost: (id, vote, posts) => dispatch(fetchVotePost(id, vote, posts)),
     voteComment: (id, vote, comentarios) => dispatch(fetchVoteComment(id, vote, comentarios)),
     deleteComment: (post, id) => dispatch(fetchDeleteComment(post, id)),
-    ordenaPosts: (posts, escolha) => dispatch(ordenaPosts(posts, escolha))
+    ordenaPosts: (posts, escolha) => dispatch(ordenaPosts(posts, escolha)),
+    MudaView: (editar, comentario) => dispatch(MudaViewComment(editar, comentario))
   }
 }

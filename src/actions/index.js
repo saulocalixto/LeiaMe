@@ -18,6 +18,7 @@ export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
 export const VOTE_COMMENT = 'VOTE_COMMENT'
 export const EDITAR_COMENTARIO = 'EDITAR_COMENTARIO';
+export const MUDAVIEW_COMMENT = 'MUDAVIEW_COMMENT';
 
 
 export function getAllPosts(posts) {
@@ -162,6 +163,14 @@ export const fetchDeleteComment = (post, id) => dispatch => (
     dispatch(deleteComment(post, id))
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
+
+export function MudaViewComment(editar, comentario) {
+  return {
+    type: MUDAVIEW_COMMENT,
+    editar,
+    comentario
+  }
+}
 
 export const voteComment = (id, vote, comentarios) => {
   return {

@@ -111,6 +111,7 @@ class App extends Component {
                 exact path={`/${categoria.path}`}
                 render={() => (
                   <ParcialPosts
+                    filtro={categoria.name}
                     posts={posts
                       .filter(post => post.category === categoria.name)}
                     setId={this.setId}

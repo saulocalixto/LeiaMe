@@ -101,7 +101,7 @@ class NovoPost extends Component {
   }
 }
 
-export const mapStateToProps = (store) => {
+const mapStateToProps = (store) => {
   const categorias = store.categorias
   const posts = store.posts["posts"]
   return {

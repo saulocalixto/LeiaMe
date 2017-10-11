@@ -8,14 +8,14 @@ import { Link } from "react-router-dom";
 import { If, Then, Else } from "react-if";
 
 class ParcialPosts extends Component {
-
   componentDidMount = () => {
     this.props.posts.map(post => {
       return this.props.getAllComments(post.id, post);
-    })
-  }
+    });
+  };
 
   render() {
+    const { filtro, posts } = this.props;
     return (
       <div style={AppCss.postagens}>
         <div style={AppCss.Botao}>
@@ -23,39 +23,53 @@ class ParcialPosts extends Component {
             Novo Post
           </Button>
         </div>
-        <If condition={this.props.posts !== 0}>
+        <If
+          condition={
+            posts.filter(
+              x => (filtro ? x.category === filtro : x.category !== null)
+            ).length !== 0
+          }
+        >
           <Then>
             <div>
-              {this.props.posts.map((x, index) => (
-                <Panel
-                  header={`${x.title} || Por: ${x.author}`}
-                  bsStyle="primary"
-                  key={x.id}
-                  value={x.id}
-                  style={AppCss.Painel}
-                  eventKey={index + 1}
-                >
-                  <HeaderPost post={x} />
+              {posts
+                .filter(
+                  x => (filtro ? x.category === filtro : x.category !== null)
+                )
+                .map((x, index) => (
+                  <Panel
+                    header={`${x.title} || Por: ${x.author}`}
+                    bsStyle="primary"
+                    key={x.id}
+                    value={x.id}
+                    style={AppCss.Painel}
+                    eventKey={index + 1}
+                  >
+                    <HeaderPost post={x} />
 
-                  <Link className="close-search" to={`/post/${x.id}`}>
-                    <Button
-                      value={x.id}
-                      bsStyle="primary"
-                      bsSize="small"
-                      onClick={() => this.props.setId(x.id)}
-                    >
-                      Abrir
-                  </Button>
-                  </Link>
-                </Panel>
-              ))}
+                    <Link className="close-search" to={`/post/${x.id}`}>
+                      <Button
+                        value={x.id}
+                        bsStyle="primary"
+                        bsSize="small"
+                        onClick={() => this.props.setId(x.id)}
+                      >
+                        Abrir
+                      </Button>
+                    </Link>
+                  </Panel>
+                ))}
             </div>
           </Then>
-          <Else><div style={AppCss.mensagem}>Seja o primeiro a compartilhar...</div></Else>
+          <Else>
+            <div style={AppCss.mensagem}>Seja o primeiro a compartilhar...</div>
+          </Else>
         </If>
       </div>
     );
   }
 }
 
-export default connect(Map.mapStateToProps, Map.mapDispatchToProps)(ParcialPosts);
+export default connect(Map.mapStateToProps, Map.mapDispatchToProps)(
+  ParcialPosts
+);

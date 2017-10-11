@@ -7,6 +7,7 @@ import {
   DELETE_POST,
   GET_COMMENTS,
   ADD_COMMENT,
+  MUDAVIEW_COMMENT,
   VOTE_COMMENT,
   DELETE_COMMENT,
   GET_POST,
@@ -131,13 +132,13 @@ function categorias(state = { categorias: [] }, action) {
   }
 }
 
-function comentarios(state = { loadingComentarios: true }, action) {
-  let comentarios;
+function comentarios(state = { loadingComentarios:true, comentarios:[] }, action) {
+  let comentarios = [];
   switch (action.type) {
     case GET_COMMENTS:
       const comments = action.comentarios.map(comentario => {
         let data = { data: new Date(comentario.timestamp).toLocaleString('pt-BR') }
-        comentario = Object.assign(comentario, data)
+        comentario = Object.assign(comentario, data, {editar : false})
         return comentario;
       }).filter(comentario => comentario.author !== undefined)
       Object.assign(action.post, { comentarios: comments })
@@ -147,16 +148,18 @@ function comentarios(state = { loadingComentarios: true }, action) {
       }
     case ADD_COMMENT:
       let dataComment = { data: new Date(action.comentario.timestamp).toLocaleString('pt-BR') }
-      const comentarioData = Object.assign(action.comentario, dataComment, { voteScore: 1 })
-      action.posts.comentarios.push(comentarioData);
+      const comentarioData = Object.assign(action.comentario, dataComment, { voteScore: 1 }, {editar : false})
+      comentarios = action.posts.comentarios.push(comentarioData);
       return {
-        ...state
+        ...state,
+        comentarios
       }
     case DELETE_COMMENT:
-      comentarios = action.post.comentarios.filter(x => x.id !== action.id)
-      action.post.comentarios = comentarios;
+      action.post.comentarios = action.post.comentarios.filter(x => x.id !== action.id);
+      comentarios = action.post.comentarios;
       return {
-        ...state
+        ...state,
+        comentarios
       }
     case VOTE_COMMENT:
       const commentVote = action.comentarios.find(x => x.id === action.id);
@@ -170,10 +173,20 @@ function comentarios(state = { loadingComentarios: true }, action) {
         default:
           console.log("Opção inválida.");
       }
-      action.comentarios.filter(x => x.id !== action.id).concat(commentVote);
+      comentarios = action.comentarios.filter(x => x.id !== action.id).concat(commentVote);
 
       return {
-        ...state
+        ...state,
+        comentarios
+      }
+    case MUDAVIEW_COMMENT:
+      const editar = action.editar;
+      const comentario = action.comentario;
+      comentario.editar = editar;
+      return {
+        ...state,
+        editar,
+        comentario
       }
     default:
       return {
