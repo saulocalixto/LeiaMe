@@ -13,6 +13,7 @@ import NotLike from "react-icons/lib/ti/thumbs-down";
 import BotaoEditar from "react-icons/lib/ti/pencil";
 import * as PostsCss from "../../style/PostsCss.js";
 import sortBy from "sort-by";
+import Votacao from "./Votacao.js";
 
 class FullPost extends Component {
   popoverHoverFocus = mensagem => (
@@ -66,9 +67,7 @@ class FullPost extends Component {
                 <OverlayTrigger
                   trigger={["hover", "focus"]}
                   placement="bottom"
-                  overlay={this.popoverHoverFocus(
-                    "Remover Post"
-                  )}
+                  overlay={this.popoverHoverFocus("Remover Post")}
                 >
                   <Link className="close-search" to="/">
                     <IconTrash
@@ -83,62 +82,7 @@ class FullPost extends Component {
                   </Link>
                 </OverlayTrigger>
               </div>
-              <div className="votacao" style={{ textAlign: "right" }}>
-                <Link to="#">
-                  <OverlayTrigger
-                    trigger={["hover", "focus"]}
-                    placement="bottom"
-                    overlay={this.popoverHoverFocus("+3 pontos!")}
-                  >
-                    <Heart
-                      className="Loved"
-                      onClick={() =>
-                        this.props.votePost(
-                          this.props.postUnico.id,
-                          "loved",
-                          this.props.posts
-                        )}
-                      size={"20px"}
-                      style={{ color: "red" }}
-                    />
-                  </OverlayTrigger>
-                </Link>
-                <Link to="#">
-                  <OverlayTrigger
-                    trigger={["hover", "focus"]}
-                    placement="bottom"
-                    overlay={this.popoverHoverFocus("+1 ponto!")}
-                  >
-                    <Like
-                      onClick={() =>
-                        this.props.votePost(
-                          this.props.postUnico.id,
-                          "upVote",
-                          this.props.posts
-                        )}
-                      size={"20px"}
-                      style={{ margin: "15px" }}
-                    />
-                  </OverlayTrigger>
-                </Link>
-                <Link to="#">
-                  <OverlayTrigger
-                    trigger={["hover", "focus"]}
-                    placement="bottom"
-                    overlay={this.popoverHoverFocus("-1 ponto!")}
-                  >
-                    <NotLike
-                      onClick={() =>
-                        this.props.votePost(
-                          this.props.postUnico.id,
-                          "downVote",
-                          this.props.posts
-                        )}
-                      size={"20px"}
-                    />
-                  </OverlayTrigger>
-                </Link>
-              </div>
+              <Votacao postUnico={this.props.postUnico} popoverHoverFocus={this.popoverHoverFocus} />
             </Panel>
             <div style={AppCss.postagens}>
               <Button onClick={() => this.props.open()}>Comentários</Button>

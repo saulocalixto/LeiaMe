@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { Button, Panel } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { If, Then, Else } from "react-if";
+import Votacao from './Votacao.js'
 
 class ParcialPosts extends Component {
   componentDidMount = () => {
@@ -46,6 +47,8 @@ class ParcialPosts extends Component {
                     eventKey={index + 1}
                   >
                     <HeaderPost post={x} qtdComentarios={x.comentarios.length} />
+
+                    <Votacao postUnico={x}/>
 
                     <Link className="close-search" to={`/${this.props.categorias.find(y => y.name === x.category).path}/${x.id}`}>
                       <Button

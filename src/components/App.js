@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as PostsCss from '../style/PostsCss.js'
+import * as PostsCss from "../style/PostsCss.js";
 import NovoPost from "./Posts/NovoPost.js";
 import * as Map from "./Maps.js";
 import ModalComponent from "./Modal.js";
@@ -12,7 +12,7 @@ import FullPost from "./Posts/FullPost.js";
 
 class App extends Component {
   state = {
-    sort: 'voteScore',
+    sort: "voteScore",
     id: "",
     showModal: false,
     showComments: false
@@ -41,12 +41,12 @@ class App extends Component {
   };
 
   tipoSort = sort => {
-    this.props.ordenaPosts(this.props.posts, sort)
-  }
+    this.props.ordenaPosts(this.props.posts, sort);
+  };
 
   componentDidMount() {
-    this.props.allCategorias();
     this.props.allPosts();
+    this.props.allCategorias();
   }
 
   close = () => {
@@ -66,38 +66,41 @@ class App extends Component {
     return (
       <div className="wrap">
         <Menu tipoSort={this.tipoSort} />
-        {loading ?
+        {loading || categorias.length === 0 ? (
           <div style={PostsCss.mensagem}>Loading...</div>
-          :
+        ) : (
           <div>
             <Route
-              exact path="/"
+              exact
+              path="/"
               render={() => (
-                <ParcialPosts
-                  posts={posts}
-                  abrirModal={this.open}
-                />
+                <ParcialPosts posts={posts} abrirModal={this.open} />
               )}
             />
 
             {categorias.map(categoria => (
               <Route
                 key={categoria.path}
-                exact path={`/${categoria.path}`}
+                exact
+                path={`/${categoria.path}`}
                 render={() => (
                   <ParcialPosts
                     filtro={categoria.name}
-                    posts={posts
-                      .filter(post => post.category === categoria.name)}
+                    posts={posts.filter(
+                      post => post.category === categoria.name
+                    )}
                     abrirModal={this.open}
                   />
                 )}
               />
             ))}
-            {posts.map((post) => (
-              <div className='container' key={post.id}>
+            {posts.map(post => (
+              <div className="container" key={post.id}>
                 <Route
-                  exact path={`/${this.props.categorias.find(x => x.name === post.category).path}/${post.id}`}
+                  exact
+                  path={`/${this.props.categorias.find(
+                    x => x.name === post.category
+                  ).path}/${post.id}`}
                   render={() => (
                     <FullPost
                       abrirModal={this.open}
@@ -105,7 +108,8 @@ class App extends Component {
                       show={this.state.showComments}
                       open={this.openComment}
                       id={post.id}
-                      postUnico={post} />
+                      postUnico={post}
+                    />
                   )}
                 />
               </div>
@@ -115,14 +119,18 @@ class App extends Component {
               close={this.close}
               component={
                 <NovoPost
-                  post={this.props.history.location.pathname === "/" ? {} : this.props.post}
+                  post={
+                    this.props.history.location.pathname === "/"
+                      ? {}
+                      : this.props.post
+                  }
                   close={this.close}
                   guid={this.guid}
                 />
               }
             />
           </div>
-        }
+        )}
       </div>
     );
   }
