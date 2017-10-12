@@ -17,7 +17,7 @@ export const GET_COMMENTS = 'GET_COMMENTS';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
 export const VOTE_COMMENT = 'VOTE_COMMENT'
-export const EDITAR_COMENTARIO = 'EDITAR_COMENTARIO';
+export const EDIT_COMMENT = 'EDIT_COMMENT';
 export const MUDAVIEW_COMMENT = 'MUDAVIEW_COMMENT';
 
 
@@ -136,17 +136,17 @@ export const fetchgetCommentsPost = (id, post) => dispatch => (
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
 
-export function addComment(comentario, posts) {
+export function addComment(comentario, comentarios) {
   return {
     type: ADD_COMMENT,
     comentario,
-    posts
+    comentarios
   }
 }
 
-export const fetchAddComment = (comentario, posts) => dispatch => (
+export const fetchAddComment = (comentario, comentarios) => dispatch => (
   ApiComments.addComment(comentario).then(() => {
-    dispatch(addComment(comentario, posts))
+    dispatch(addComment(comentario, comentarios))
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );
 
@@ -184,5 +184,20 @@ export const voteComment = (id, vote, comentarios) => {
 export const fetchVoteComment = (id, vote, comentarios) => dispatch => (
   ApiComments.voteComment(id, vote).then(() => {
     dispatch(voteComment(id, vote, comentarios))
+  }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
+);
+
+export const editComment = (id, comentario, comentarios) => {
+  return {
+    type: EDIT_COMMENT,
+    id,
+    comentario,
+    comentarios
+  }
+}
+
+export const fetchEditComment = (id, comentario, comentarios) => dispatch => (
+  ApiComments.editComment(id, comentario).then(() => {
+    dispatch(editComment(id, comentario, comentarios))
   }, erro => console.log(`Algo de errado não deu certo: ${erro}`))
 );

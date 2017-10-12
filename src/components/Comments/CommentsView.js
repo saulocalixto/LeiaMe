@@ -58,15 +58,15 @@ class CommentsView extends Component {
     const parentId = this.props.parentId;
 
     if (body !== "" && author !== "") {
-      const comment = {
+      const comentario = {
         id: this.guid(),
         timestamp: Date.now(),
         body,
         author,
         parentId
       };
-      const posts = this.props.posts.find(x => x.id === this.props.parentId);
-      this.props.addComment(comment, posts);
+      const comentarios = this.props.comentarios;
+      this.props.addComment(comentario, comentarios);
       formulario.reset();
     } else {
       event.preventDefault();
@@ -74,7 +74,42 @@ class CommentsView extends Component {
     }
   };
 
+  formValidationEdit = event => {
+    event.preventDefault();
+
+    const formulario = event.target;
+    const body = formulario["idTextoComment"].value;
+    const parentId = this.props.parentId;
+    const id = formulario["idComment"].value;
+    const author = formulario["authorComment"].value;
+
+    const comentarios = this.props.comentarios;
+    const comentario = comentarios.find(x => x.id === id);
+
+    if (body !== "") {
+      const comment = {
+        id,
+        timestamp: Date.now(),
+        body,
+        author,
+        parentId,
+        voteScore: comentario.voteScore
+      };
+      this.props.editComment(id, comment, comentarios);
+    } else {
+      event.preventDefault();
+      alert("Preecha todos os campos corretamente!");
+    }
+  };
+
   render() {
+    const {
+      comentarios,
+      popoverHoverFocus,
+      voteComment,
+      MudaView,
+      deleteComment
+    } = this.props;
     return (
       <div style={{ textAlign: "left" }}>
         <Well bsSize="small">
@@ -98,26 +133,38 @@ class CommentsView extends Component {
           </Form>
         </Well>
 
-        {this.props.comentarios.map(x => (
-          <div style={{ marginTop: "15px" }} key={x.id}>
-            <Panel header={`Por: ${x.author}`} eventKey="1">
-              {x.editar ? (
-                <Form>
+        {comentarios.map(comentario => (
+          <div style={{ marginTop: "15px" }} key={comentario.id}>
+            <Panel header={`Por: ${comentario.author}`} eventKey="1">
+              {comentario.editar ? (
+                <Form onSubmit={this.formValidationEdit}>
                   <FormGroup controlId="idTextoComment">
                     <FormControl
                       componentClass="textarea"
-                      defaultValue={x.body}
+                      defaultValue={comentario.body}
                       style={{ height: 120 }}
+                    />
+                  </FormGroup>
+                  <FormGroup controlId="idComment">
+                    <FormControl
+                      value={comentario.id}
+                      style={{ display: "none" }}
+                    />
+                  </FormGroup>
+                  <FormGroup controlId="authorComment">
+                    <FormControl
+                      value={comentario.author}
+                      style={{ display: "none" }}
                     />
                   </FormGroup>
                   <Button type="submit" bsStyle="primary">
                     Salvar
                   </Button>
                   <Button
-                    type='reset'
+                    type="reset"
                     bsStyle="danger"
                     onClick={() => {
-                      this.props.MudaView(false, x);
+                      MudaView(false, comentario);
                     }}
                     style={{ float: "right" }}
                   >
@@ -126,20 +173,20 @@ class CommentsView extends Component {
                 </Form>
               ) : (
                 <div className="comentario">
-                  <div style={{ marginTop: "10px" }}>{x.body}</div>
+                  <div style={{ marginTop: "10px" }}>{comentario.body}</div>
                   <div className="votacao" style={{ textAlign: "right" }}>
                     <Link to="#">
                       <OverlayTrigger
                         trigger={["hover", "focus"]}
                         placement="top"
-                        overlay={this.props.popoverHoverFocus("+1")}
+                        overlay={popoverHoverFocus("+1 ponto!")}
                       >
                         <Like
                           onClick={() =>
                             this.props.voteComment(
-                              x.id,
+                              comentario.id,
                               "upVote",
-                              this.props.comentarios
+                              comentarios
                             )}
                           size={"20px"}
                           style={{ margin: "15px" }}
@@ -150,39 +197,41 @@ class CommentsView extends Component {
                       <OverlayTrigger
                         trigger={["hover", "focus"]}
                         placement="top"
-                        overlay={this.props.popoverHoverFocus("-1")}
+                        overlay={popoverHoverFocus("-1 ponto!")}
                       >
                         <NotLike
                           onClick={() =>
-                            this.props.voteComment(
-                              x.id,
-                              "downVote",
-                              this.props.comentarios
-                            )}
+                            voteComment(comentario.id, "downVote", comentarios)}
                           size={"20px"}
                         />
                       </OverlayTrigger>
                     </Link>
                     <div>
-                      <strong>Score:</strong> {x.voteScore}{" "}
+                      <strong>Score:</strong> {comentario.voteScore}{" "}
                     </div>
                   </div>
                   <div>
                     <hr />
-                    <Link to="#">
-                      <BotaoEditar
-                        size={"30px"}
-                        onClick={() => {
-                          this.props.MudaView(true, x);
-                        }}
-                      />
-                    </Link>
-                    <Link to="#">
-                      <OverlayTrigger
-                        trigger={["hover", "focus"]}
-                        placement="top"
-                        overlay={this.props.popoverHoverFocus("Deleta")}
-                      >
+                    <OverlayTrigger
+                      trigger={["hover", "focus"]}
+                      placement="top"
+                      overlay={popoverHoverFocus("Editar Comentário")}
+                    >
+                      <Link to="#">
+                        <BotaoEditar
+                          size={"30px"}
+                          onClick={() => {
+                            MudaView(true, comentario);
+                          }}
+                        />
+                      </Link>
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                      trigger={["hover", "focus"]}
+                      placement="top"
+                      overlay={popoverHoverFocus("Remover Comentário")}
+                    >
+                      <Link to="#">
                         <IconTrash
                           size={"30px"}
                           style={{
@@ -191,12 +240,12 @@ class CommentsView extends Component {
                             marginLeft: "5px"
                           }}
                           onClick={() =>
-                            this.props.deleteComment(this.props.post, x.id)}
+                            deleteComment(comentarios, comentario.id)}
                         />
-                      </OverlayTrigger>
-                    </Link>
+                      </Link>
+                    </OverlayTrigger>
                     <span style={{ marginLeft: "200px" }}>
-                      <strong>Data</strong>: {x.data}
+                      <strong>Data</strong>: {comentario.data}
                     </span>
                   </div>
                 </div>
@@ -210,11 +259,9 @@ class CommentsView extends Component {
 }
 
 const mapStateToProps = store => {
-  const posts = store.posts["posts"];
-  const editar = store.comentarios["editar"];
+  const comentarios = store.comentarios;
   return {
-    posts,
-    editar
+    ...comentarios
   };
 };
 

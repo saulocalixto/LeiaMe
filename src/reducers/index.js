@@ -11,7 +11,8 @@ import {
   VOTE_COMMENT,
   DELETE_COMMENT,
   GET_POST,
-  VOTE_POST
+  VOTE_POST,
+  EDIT_COMMENT
 } from '../actions';
 import { combineReducers } from 'redux'
 import sortBy from 'sort-by'
@@ -134,29 +135,34 @@ function categorias(state = { categorias: [] }, action) {
 
 function comentarios(state = { loadingComentarios:true, comentarios:[] }, action) {
   let comentarios = [];
+  let comentario = {};
   switch (action.type) {
     case GET_COMMENTS:
-      const comments = action.comentarios.map(comentario => {
+        comentarios = action.comentarios.map(comentario => {
         let data = { data: new Date(comentario.timestamp).toLocaleString('pt-BR') }
         comentario = Object.assign(comentario, data, {editar : false})
         return comentario;
-      }).filter(comentario => comentario.author !== undefined)
-      Object.assign(action.post, { comentarios: comments })
+      }).filter(comentario => comentario.author !== undefined).sort(sortBy("voteScore")).reverse()
+      Object.assign(action.post, { comentarios })
       return {
         ...state,
+        comentarios,
         loadingComentarios: false
       }
     case ADD_COMMENT:
       let dataComment = { data: new Date(action.comentario.timestamp).toLocaleString('pt-BR') }
-      const comentarioData = Object.assign(action.comentario, dataComment, { voteScore: 1 }, {editar : false})
-      comentarios = action.posts.comentarios.push(comentarioData);
+      comentarios = action.comentarios.filter(x => x.id !== undefined);
+      comentario = action.comentario;
+      Object.assign(comentario, dataComment, { voteScore: 1 }, {editar : false})
+      comentarios.push(comentario);
+      comentarios.sort(sortBy("voteScore")).reverse()
       return {
         ...state,
-        comentarios
+        comentarios,
+        loadingComentarios: false
       }
     case DELETE_COMMENT:
-      action.post.comentarios = action.post.comentarios.filter(x => x.id !== action.id);
-      comentarios = action.post.comentarios;
+      comentarios = action.post.filter(x => x.id !== action.id).sort(sortBy("voteScore")).reverse();
       return {
         ...state,
         comentarios
@@ -173,20 +179,33 @@ function comentarios(state = { loadingComentarios:true, comentarios:[] }, action
         default:
           console.log("Opção inválida.");
       }
-      comentarios = action.comentarios.filter(x => x.id !== action.id).concat(commentVote);
-
+      comentarios = action.comentarios
+        .filter(x => x.id !== action.id)
+        .concat(commentVote)
+        .sort(sortBy("voteScore"))
+        .reverse();
       return {
         ...state,
         comentarios
       }
     case MUDAVIEW_COMMENT:
       const editar = action.editar;
-      const comentario = action.comentario;
+      comentario = action.comentario;
       comentario.editar = editar;
       return {
         ...state,
         editar,
         comentario
+      }
+      case EDIT_COMMENT:
+      const comentarioEditado = action.comentario;
+      let data = { data: new Date(comentarioEditado.timestamp).toLocaleString('pt-BR') }
+      Object.assign(comentarioEditado, data, {editar : false})
+      comentarios = action.comentarios.filter(x => x.id !== action.id);
+      comentarios.push(comentarioEditado).sort(sortBy("voteScore")).reverse();
+      return {
+        ...state,
+        comentarios
       }
     default:
       return {

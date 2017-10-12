@@ -38,3 +38,15 @@ export const voteComment = (id, vote) =>
     },
     body: JSON.stringify({ id, option: vote })
   }).then(res => res.json())
+
+  export const editComment = (id, comentario) =>
+  fetch(`${api}/comments/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': 'Saulo',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({ id, ...comentario })
+  })
+    .then(res => { res.json() });

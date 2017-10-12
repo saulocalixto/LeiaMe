@@ -61,30 +61,6 @@ class App extends Component {
     this.setState({ showComments: !this.state.showComments });
   };
 
-  setId = id => {
-    this.props.getFullPost(this.props.posts, id);
-  };
-
-  SubmitPost = formulario => {
-    const title = formulario["idTitulo"].value;
-    const author = formulario["idAutor"].value;
-    const body = formulario["idTextoPost"].value;
-    const category = formulario["idCategoria"].value;
-
-    const post = {
-      id: this.props.guid,
-      timestamp: Date.now(),
-      title,
-      body,
-      author,
-      category
-    };
-
-    this.props.addPost(post, this.props.posts);
-
-    this.close();
-  };
-
   render() {
     const { posts, loading, categorias } = this.props;
     return (
@@ -99,7 +75,6 @@ class App extends Component {
               render={() => (
                 <ParcialPosts
                   posts={posts}
-                  setId={this.setId}
                   abrirModal={this.open}
                 />
               )}
@@ -114,7 +89,6 @@ class App extends Component {
                     filtro={categoria.name}
                     posts={posts
                       .filter(post => post.category === categoria.name)}
-                    setId={this.setId}
                     abrirModal={this.open}
                   />
                 )}
@@ -123,7 +97,7 @@ class App extends Component {
             {posts.map((post) => (
               <div className='container' key={post.id}>
                 <Route
-                  exact path={`/post/${post.id}`}
+                  exact path={`/${this.props.categorias.find(x => x.name === post.category).path}/${post.id}`}
                   render={() => (
                     <FullPost
                       abrirModal={this.open}

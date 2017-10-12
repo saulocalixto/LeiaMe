@@ -11,7 +11,8 @@ import {
   fetchDeleteComment,
   fetchVoteComment,
   ordenaPosts,
-  MudaViewComment
+  MudaViewComment,
+  fetchEditComment
 } from '../actions'
 
 export const guid = () => {
@@ -56,11 +57,12 @@ export const mapDispatchToProps = (dispatch) => {
     editPost: (id, post, posts) => dispatch(fetchEditPosts(id, post, posts)),
     deletPost: (posts, id) => dispatch(fetchDeletPost(posts, id)),
     getAllComments: (id, post) => dispatch(fetchgetCommentsPost(id, post)),
-    addComment: (comentario, posts) => dispatch(fetchAddComment(comentario, posts)),
+    addComment: (comentario, comentarios) => dispatch(fetchAddComment(comentario, comentarios)),
     getFullPost: (posts, id) => dispatch(getPost(posts, id)),
     votePost: (id, vote, posts) => dispatch(fetchVotePost(id, vote, posts)),
     voteComment: (id, vote, comentarios) => dispatch(fetchVoteComment(id, vote, comentarios)),
     deleteComment: (post, id) => dispatch(fetchDeleteComment(post, id)),
+    editComment: (id, comentario, comentarios) => dispatch(fetchEditComment(id, comentario, comentarios)),
     ordenaPosts: (posts, escolha) => dispatch(ordenaPosts(posts, escolha)),
     MudaView: (editar, comentario) => dispatch(MudaViewComment(editar, comentario))
   }

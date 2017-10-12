@@ -45,14 +45,13 @@ class ParcialPosts extends Component {
                     style={AppCss.Painel}
                     eventKey={index + 1}
                   >
-                    <HeaderPost post={x} />
+                    <HeaderPost post={x} qtdComentarios={x.comentarios.length} />
 
-                    <Link className="close-search" to={`/post/${x.id}`}>
+                    <Link className="close-search" to={`/${this.props.categorias.find(y => y.name === x.category).path}/${x.id}`}>
                       <Button
                         value={x.id}
                         bsStyle="primary"
                         bsSize="small"
-                        onClick={() => this.props.setId(x.id)}
                       >
                         Abrir
                       </Button>
