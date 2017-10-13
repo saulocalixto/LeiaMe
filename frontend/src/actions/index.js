@@ -2,8 +2,10 @@ import * as ApiPosts from '../api/ApiPosts.js'
 import * as ApiComments from '../api/ApiComments.js'
 import * as ApiCategorias from '../api/ApiCategorias.js'
 
+//Categorias//
 export const ALL_CATEGORIAS = 'ALL_CATEGORIAS'
-///Posts///
+
+//Posts//
 export const ALL_POSTS = 'ALL_POSTS';
 export const ADD_POST = 'ADD_POST'
 export const EDITAR_POST = 'EDITAR_POST';
@@ -12,7 +14,7 @@ export const GET_POST = 'GET_POST';
 export const VOTE_POST = 'VOTE_POST';
 export const ORDENA_POSTS = 'ORDENA_POSTS';
 
-///Comentários///
+//Comentários//
 export const GET_COMMENTS = 'GET_COMMENTS';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';

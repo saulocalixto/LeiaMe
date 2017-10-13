@@ -17,12 +17,16 @@ import {
 import { combineReducers } from "redux";
 import sortBy from "sort-by";
 
-export const initialState = {
+export const initialStatePosts = {
   posts: [],
   loading: true
 };
 
-function posts(state = initialState, action) {
+export const initialStateComments = { 
+  loadingComentarios: true, 
+  comentarios: [] }
+
+function posts(state = initialStatePosts, action) {
   let posts = [];
   switch (action.type) {
     case ALL_POSTS:
@@ -150,7 +154,7 @@ function categorias(state = { categorias: [] }, action) {
 }
 
 function comentarios(
-  state = { loadingComentarios: true, comentarios: [] },
+  state = initialStateComments,
   action
 ) {
   let comentarios = [];
