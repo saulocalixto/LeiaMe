@@ -53,7 +53,7 @@ class App extends Component {
         {loading || categorias.length === 0 ? (
           <div style={PostsCss.mensagem}>Loading...</div>
         ) : (
-            <div>
+            <div className='conteudo'>
               <Route
                 exact
                 path="/"
@@ -126,6 +126,15 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = store => {
+  const posts = store.posts;
+  const categorias = store.categorias;
+  return {
+    ...posts,
+    ...categorias
+  };
+};
+
 export default withRouter(
-  connect(Map.mapStateToProps, Map.mapDispatchToProps)(App)
+  connect(mapStateToProps, Map.mapDispatchToProps)(App)
 );
