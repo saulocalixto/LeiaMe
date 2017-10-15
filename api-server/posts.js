@@ -9,7 +9,7 @@ const defaultData = {
     title: 'O que foi feito dos Engenheiros do Hawaii',
     body: 'Os Engenheiros do Hawaii estão parados enquanto Humberto Gessinger está em turnê solo de seu último disco INSULAR. O show foi gravado e em breve será lançado em DVD. Toda semana, na madrugada entre a segunda e a terça feira, Humberto escreve no BLOGESSINGER. Lá você pode acompanhar a agenda de shows e outras novidades, assim como no humberto gessinger oficial no facebook.',
     author: 'Humberto Gessinger',
-    category: 'Música',
+    category: {name: 'Música', path: 'musica'},
     voteScore: 7,
     deleted: false
   },
@@ -22,7 +22,7 @@ const defaultData = {
     importante. Então deixei de ser pão duro e investi mais de mil reais no curso!
     Não me arrependo.`,
     author: 'Saulo Calixto',
-    category: 'Programação',
+    category: {name: 'Programação', path: 'programacao'},
     voteScore: -5,
     deleted: false
   },

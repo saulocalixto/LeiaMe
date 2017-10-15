@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import * as AppCss from "../../style/PostsCss.js";
 import * as Map from "../Maps.js";
-import HeaderPost from "./HeaderPost.js";
+import CabecalhoPost from "./CabecalhoPost.js";
 import { connect } from "react-redux";
 import { Button, Panel } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -28,7 +28,7 @@ class ParcialPosts extends Component {
         <If
           condition={
             posts.filter(
-              x => (filtro ? x.category === filtro : x.category !== null)
+              x => (filtro ? x.category.path === filtro : x.category !== null)
             ).length !== 0
           }
         >
@@ -36,7 +36,7 @@ class ParcialPosts extends Component {
             <div>
               {posts
                 .filter(
-                x => (filtro ? x.category === filtro : x.category !== null)
+                x => (filtro ? x.category.path === filtro : x.category.path !== null)
                 )
                 .map((x, index) => (
                   <Panel
@@ -47,12 +47,12 @@ class ParcialPosts extends Component {
                     style={AppCss.Painel}
                     eventKey={index + 1}
                   >
-                    <HeaderPost post={x} qtdComentarios={x.comentarios.length} />
+                    <CabecalhoPost post={x} qtdComentarios={x.comentarios.length} />
                     <BotoesControle
                       postUnico={x}
                       abrirModal={this.props.abrirModalEditar} />
                     <Votacao postUnico={x} />
-                    <Link className="close-search" to={`/${this.props.categorias.find(y => y.name === x.category).path}/${x.id}`}>
+                    <Link className="close-search" to={`/${x.category.path}/${x.id}`}>
                       <Button
                         value={x.id}
                         bsStyle="primary"

@@ -1,18 +1,18 @@
 import {
   fetchPosts,
   fetchCategorias,
-  fetchAddPosts,
-  fetchEditPosts,
-  fetchDeletPost,
-  fetchgetCommentsPost,
-  fetchAddComment,
-  getPost,
-  fetchVotePost,
-  fetchDeleteComment,
-  fetchVoteComment,
+  fetchAdicionarPosts,
+  fetchEditarPosts,
+  fetchApagarPost,
+  fetchPegarComentariosPost,
+  fetchAdicionarComentario,
+  pegarPost,
+  fetchVotarPost,
+  fetchDeletarComentario,
+  fetchVotarComentario,
   ordenaPosts,
-  MudaViewComment,
-  fetchEditComment
+  mudaViewComentario,
+  fetchEditarComentario
 } from '../actions'
 
 export const mapStateToProps = (store) => {
@@ -28,19 +28,19 @@ export const mapStateToProps = (store) => {
 
 export const mapDispatchToProps = (dispatch) => {
   return {
-    allPosts: () => dispatch(fetchPosts()),
     allCategorias: () => dispatch(fetchCategorias()),
-    addPost: (post, posts) => dispatch(fetchAddPosts(post, posts)),
-    editPost: (id, post, posts) => dispatch(fetchEditPosts(id, post, posts)),
-    deletPost: (posts, id) => dispatch(fetchDeletPost(posts, id)),
-    getAllComments: (id, post) => dispatch(fetchgetCommentsPost(id, post)),
-    addComment: (comentario, comentarios) => dispatch(fetchAddComment(comentario, comentarios)),
-    getFullPost: (posts, id) => dispatch(getPost(posts, id)),
-    votePost: (id, vote, posts) => dispatch(fetchVotePost(id, vote, posts)),
-    voteComment: (id, vote, comentarios) => dispatch(fetchVoteComment(id, vote, comentarios)),
-    deleteComment: (post, id) => dispatch(fetchDeleteComment(post, id)),
-    editComment: (id, comentario, comentarios) => dispatch(fetchEditComment(id, comentario, comentarios)),
+    allPosts: () => dispatch(fetchPosts()),
+    addPost: (post, posts) => dispatch(fetchAdicionarPosts(post, posts)),
+    editPost: (id, post, posts) => dispatch(fetchEditarPosts(id, post, posts)),
+    deletPost: (posts, id) => dispatch(fetchApagarPost(posts, id)),
+    getAllComments: (id, post) => dispatch(fetchPegarComentariosPost(id, post)),
+    getFullPost: (posts, id) => dispatch(pegarPost(posts, id)),
+    votePost: (id, vote, posts) => dispatch(fetchVotarPost(id, vote, posts)),
+    addComment: (comentario, comentarios) => dispatch(fetchAdicionarComentario(comentario, comentarios)),
+    voteComment: (id, vote, comentarios) => dispatch(fetchVotarComentario(id, vote, comentarios)),
+    deleteComment: (post, id) => dispatch(fetchDeletarComentario(post, id)),
+    editComment: (id, comentario, comentarios) => dispatch(fetchEditarComentario(id, comentario, comentarios)),
     ordenaPosts: (posts, escolha) => dispatch(ordenaPosts(posts, escolha)),
-    MudaView: (editar, comentario) => dispatch(MudaViewComment(editar, comentario))
+    MudaView: (editar, comentario) => dispatch(mudaViewComentario(editar, comentario))
   }
 }

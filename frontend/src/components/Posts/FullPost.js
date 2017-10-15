@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import * as AppCss from "../../style/PostsCss.js";
 import * as Map from "../Maps.js";
-import HeaderPost from "./HeaderPost.js";
-import Comments from "../Comments/CommentsView.js";
+import CabecalhoPost from "./CabecalhoPost.js";
+import Comentarios from "../Comentarios/ComentariosView.js";
 import { connect } from "react-redux";
 import { Button, Panel, Popover } from "react-bootstrap";
 import * as PostsCss from "../../style/PostsCss.js";
@@ -36,7 +36,7 @@ class FullPost extends Component {
                 style={AppCss.Painel}
                 eventKey={1}
               >
-                <HeaderPost
+                <CabecalhoPost
                   post={this.props.postUnico}
                   qtdComentarios={this.props.comentarios.length}
                 />
@@ -51,7 +51,7 @@ class FullPost extends Component {
               <div style={AppCss.postagens}>
                 <Button onClick={() => this.props.open()}>Comentários</Button>
                 <Panel collapsible expanded={this.props.show}>
-                  <Comments
+                  <Comentarios
                     popoverHoverFocus={this.popoverHoverFocus}
                     parentId={this.props.postUnico.id}
                     style={{ position: "absolute" }}

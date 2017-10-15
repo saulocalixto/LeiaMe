@@ -1,19 +1,4 @@
-import {
-  ALL_CATEGORIAS,
-  ALL_POSTS,
-  ADD_POST,
-  ORDENA_POSTS,
-  EDITAR_POST,
-  DELETE_POST,
-  GET_COMMENTS,
-  ADD_COMMENT,
-  MUDAVIEW_COMMENT,
-  VOTE_COMMENT,
-  DELETE_COMMENT,
-  GET_POST,
-  VOTE_POST,
-  EDIT_COMMENT
-} from "../actions";
+import * as Type from '../actions/type.js';
 import { combineReducers } from "redux";
 import sortBy from "sort-by";
 
@@ -29,7 +14,7 @@ export const initialStateComments = {
 function posts(state = initialStatePosts, action) {
   let posts = [];
   switch (action.type) {
-    case ALL_POSTS:
+    case Type.TODOS_POSTS:
       let postsProvisorios = action.posts;
       posts = postsProvisorios
         .map(post => {
@@ -46,7 +31,7 @@ function posts(state = initialStatePosts, action) {
         posts,
         loading
       };
-    case ADD_POST:
+    case Type.ADICIONAR_POST:
       let data = {
         data: new Date(action.post.timestamp).toLocaleString("pt-BR")
       };
@@ -57,32 +42,31 @@ function posts(state = initialStatePosts, action) {
         { comentarios: [] }
       );
       posts = action.posts.concat(postData);
+      posts.sort(sortBy("voteScore")).reverse();
       return {
         ...state,
         posts
       };
-    case ORDENA_POSTS: {
+    case Type.ORDENA_POSTS: {
+      posts = posts.concat(action.posts);
       switch (action.escolha) {
         case "qtdComments":
-          posts = action.posts.sort(sortBy("comentarios")).reverse();
+        posts.sort(sortBy("comentarios")).reverse();
           break;
         case "category":
-          posts = action.posts.sort(sortBy("category"));
-          break;
-        case "voteScore":
-          posts = action.posts.sort(sortBy("voteScore")).reverse();
+          posts.sort(sortBy("category.name"));
           break;
         case "timestamp":
-          posts = action.posts.sort(sortBy("timestamp")).reverse();
+          posts.sort(sortBy("timestamp")).reverse();
           break;
         case "titulo":
-          posts = action.posts.sort(sortBy("title"));
+          posts.sort(sortBy("title"));
           break;
         case "autor":
-          posts = action.posts.sort(sortBy("author"));
+          posts.sort(sortBy("author"));
           break;
         default:
-          posts = action.posts.sort(sortBy("voteScore")).reverse();
+          posts.sort(sortBy("voteScore")).reverse();
       }
 
       return {
@@ -90,26 +74,26 @@ function posts(state = initialStatePosts, action) {
         posts
       };
     }
-    case GET_POST:
+    case Type.PEGAR_POST:
       const post = action.posts.find(x => x.id === action.id);
       return {
         ...state,
         post
       };
-    case EDITAR_POST:
+    case Type.EDITAR_POST:
       let postEditar = Object.assign(action.post, { id: action.id });
       posts = action.posts.filter(x => x.id !== action.id).concat(postEditar);
       return {
         ...state,
         posts
       };
-    case DELETE_POST:
+    case Type.APAGAR_POST:
       posts = action.posts.filter(x => x.id !== action.id);
       return {
         ...state,
         posts
       };
-    case VOTE_POST:
+    case Type.VOTAR_POST:
       const postVote = action.posts.find(x => x.id === action.id);
       switch (action.vote) {
         case "upVote":
@@ -141,7 +125,7 @@ function posts(state = initialStatePosts, action) {
 
 function categorias(state = { categorias: [] }, action) {
   switch (action.type) {
-    case ALL_CATEGORIAS:
+    case Type.TODAS_CATEGORIAS:
       const categorias = action.categorias;
       categorias.sort(sortBy("name"));
       return {
@@ -160,7 +144,7 @@ function comentarios(
   let comentarios = [];
   let comentario = {};
   switch (action.type) {
-    case GET_COMMENTS:
+    case Type.TODOS_COMENTARIOS:
       comentarios = action.comentarios
         .map(comentario => {
           let data = {
@@ -170,7 +154,7 @@ function comentarios(
           return comentario;
         })
         .filter(comentario => comentario.author !== undefined)
-        .sort(sortBy("voteScore"))
+        .sort(sortBy("data"))
         .reverse();
       Object.assign(action.post, { comentarios });
       return {
@@ -178,7 +162,7 @@ function comentarios(
         comentarios,
         loadingComentarios: false
       };
-    case ADD_COMMENT:
+    case Type.ADICIONAR_COMENTARIO:
       let dataComment = {
         data: new Date(action.comentario.timestamp).toLocaleString("pt-BR")
       };
@@ -191,22 +175,22 @@ function comentarios(
         { editar: false }
       );
       comentarios.push(comentario);
-      comentarios.sort(sortBy("voteScore")).reverse();
+      comentarios.sort(sortBy("data")).reverse();
       return {
         ...state,
         comentarios,
         loadingComentarios: false
       };
-    case DELETE_COMMENT:
+    case Type.DELETAR_COMENTARIO:
       comentarios = action.post
         .filter(x => x.id !== action.id)
-        .sort(sortBy("voteScore"))
+        .sort(sortBy("data"))
         .reverse();
       return {
         ...state,
         comentarios
       };
-    case VOTE_COMMENT:
+    case Type.VOTAR_COMENTARIO:
       const commentVote = action.comentarios.find(x => x.id === action.id);
       switch (action.vote) {
         case "upVote":
@@ -221,13 +205,13 @@ function comentarios(
       comentarios = action.comentarios
         .filter(x => x.id !== action.id)
         .concat(commentVote)
-        .sort(sortBy("voteScore"))
+        .sort(sortBy("data"))
         .reverse();
       return {
         ...state,
         comentarios
       };
-    case MUDAVIEW_COMMENT:
+    case Type.MUDAVIEW_COMENTARIO:
       const editar = action.editar;
       comentario = action.comentario;
       comentario.editar = editar;
@@ -236,7 +220,7 @@ function comentarios(
         editar,
         comentario
       };
-    case EDIT_COMMENT:
+    case Type.EDITAR_COMENTARIO:
       const comentarioEditado = action.comentario;
       let data = {
         data: new Date(comentarioEditado.timestamp).toLocaleString("pt-BR")
@@ -246,7 +230,7 @@ function comentarios(
       comentarios
         .push(comentarioEditado);
       comentarios
-        .sort(sortBy("voteScore"))
+        .sort(sortBy("data"))
         .reverse();
       return {
         ...state,

@@ -58,46 +58,48 @@ class App extends Component {
                 exact
                 path="/"
                 render={() => (
-                  <ParcialPosts posts={posts} abrirModalNovo={this.openNovo} abrirModalEditar={this.openEditar} />
+                  <ParcialPosts
+                    posts={posts}
+                    abrirModalNovo={this.openNovo}
+                    abrirModalEditar={this.openEditar} />
                 )}
               />
 
-              {categorias.map(categoria => (
-                <Route
-                  key={categoria.path}
-                  exact
-                  path={`/${categoria.path}`}
-                  render={() => (
-                    <ParcialPosts
-                      filtro={categoria.name}
-                      posts={posts.filter(
-                        post => post.category === categoria.name
-                      )}
-                      abrirModal={this.open}
-                    />
-                  )}
-                />
-              ))}
-              {posts.map(post => (
-                <div className="container" key={post.id}>
-                  <Route
-                    exact
-                    path={`/${this.props.categorias.find(
-                      x => x.name === post.category
-                    ).path}/${post.id}`}
-                    render={() => (
+
+              <Route
+                exact
+                path={"/:categoria"}
+                render={({ match: { params: { categoria } } }) => (
+                  <ParcialPosts
+                    filtro={categoria}
+                    posts={posts.filter(
+                      post => post.category.path === categoria
+                    )}
+                    abrirModal={this.open}
+                  />
+                )}
+              />
+
+              <Route
+                exact
+                path={`/:categoria/:id`}
+                render={({ match: { params: { categoria, id } } }) => (
+                  <div>
+                    {posts.find(x => x.id === id && x.category.path === categoria) ?
                       <FullPost
                         abrirModalEditar={this.openEditar}
                         removePost={this.removePost}
                         show={this.state.showComments}
                         open={this.openComment}
-                        id={post.id}
-                        postUnico={post}
+                        postUnico={posts.find(x => x.id === id && x.category.path === categoria)}
                       />
-                    )}
-                  />
-                </div>
-              ))}
+                      :
+                      <div style={PostsCss.mensagem}>Página não encontrada!</div>
+                    }
+                  </div>
+                )}
+              />
+
               <ModalComponent
                 show={this.state.showModalNovo}
                 close={this.close}

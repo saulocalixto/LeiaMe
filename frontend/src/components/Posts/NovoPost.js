@@ -11,10 +11,10 @@ class NovoPost extends Component {
     event.preventDefault();
     const formulario = event.target;
 
-    const title = formulario["idTitulo"].value;
-    const author = formulario["idAutor"].value;
-    const body = formulario["idTextoPost"].value;
-    const category = formulario["idCategoria"].value;
+    const title = formulario.idTitulo.value;
+    const author = formulario.idAutor.value;
+    const body = formulario.idTextoPost.value;
+    const category = formulario.idCategoria.value;
     const id = Guid();
     if (title !== "" && author !== "") {
       if (Object.keys(this.props.post).length === 0) {
@@ -24,7 +24,7 @@ class NovoPost extends Component {
           title,
           body,
           author,
-          category
+          category: { name: category, path: this.props.categorias.find(x => x.name === category).path }
         };
         this.props.addPost(postAdd, this.props.posts);
       } else {
@@ -37,7 +37,7 @@ class NovoPost extends Component {
           title,
           body,
           author,
-          category,
+          category: { name: category, path: this.props.categorias.find(x => x.name === category).path },
           voteScore,
           comentarios,
           data
@@ -55,6 +55,7 @@ class NovoPost extends Component {
   }
 
   render() {
+    const { categorias, post } = this.props
     return (
       <div>
         <Form onSubmit={this.formValidation}>
@@ -62,14 +63,14 @@ class NovoPost extends Component {
             <ControlLabel>Título</ControlLabel>
             <FormControl type="text"
               placeholder="Digite o título do post..."
-              defaultValue={this.props.post.title} />
+              defaultValue={post.title} />
           </FormGroup>
 
           <FormGroup controlId="idAutor">
             <ControlLabel>Autor</ControlLabel>
             <FormControl type="text"
               placeholder="Digite seu nome aqui..."
-              defaultValue={this.props.post.author} />
+              defaultValue={post.author} />
           </FormGroup>
 
           <FormGroup controlId="idCategoria">
@@ -77,9 +78,8 @@ class NovoPost extends Component {
             <FormControl
               componentClass="select"
               placeholder="select"
-              defaultValue={this.props.post.category}>
-
-              {this.props.categorias.map((categoria, index) => (
+              defaultValue={post.category ? post.category.name : ""}>
+              {categorias.map((categoria, index) => (
                 <option key={index} value={categoria.name}>{categoria.name}</option>
               ))}
             </FormControl>
@@ -90,7 +90,7 @@ class NovoPost extends Component {
             <FormControl componentClass="textarea"
               placeholder="Digite seu texto aqui..."
               style={{ height: 220 }}
-              defaultValue={this.props.post.body} />
+              defaultValue={post.body} />
           </FormGroup>
           <Button type="submit" bsStyle="primary">
             Salvar
